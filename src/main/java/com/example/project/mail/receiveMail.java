@@ -1,19 +1,19 @@
 package com.example.project.mail;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import javax.mail.*;
-import javax.mail.internet.*;
-import java.util.Date;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.ContentType;
+
 
 public class receiveMail {
     private String username;
     private String password;
-    private Date date;
-    private String from;
-    private String subject;
     private String content;
+    private String from;
+    private String text;
+    private String flag;
 
     public receiveMail(String username, String password) {
         this.username = username;
@@ -32,16 +32,57 @@ public class receiveMail {
         return content;
     }
 
-    public Date getDate() {
-        return date;
+    public String getText(){
+        return text;
     }
 
     public String getFrom() {
         return from;
     }
 
-    public String getSubject() {
-        return subject;
+    private String getTextFromMessage(Message message) throws IOException, MessagingException {
+        String result = "";
+        if (message.isMimeType("text/plain")) {
+            result = message.getContent().toString();
+        } else if (message.isMimeType("multipart/*")) {
+            MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
+            result = getTextFromMimeMultipart(mimeMultipart);
+        }
+        return result;
+    }
+
+    private String getTextFromMimeMultipart(
+            MimeMultipart mimeMultipart) throws IOException, MessagingException {
+
+        int count = mimeMultipart.getCount();
+        if (count == 0)
+            throw new MessagingException("Multipart with no body parts not supported.");
+        boolean multipartAlt = new ContentType(mimeMultipart.getContentType()).match("multipart/alternative");
+        if (multipartAlt)
+            // alternatives appear in an order of increasing
+            // faithfulness to the original content. Customize as req'd.
+            return getTextFromBodyPart(mimeMultipart.getBodyPart(count - 1));
+        String result = "";
+        for (int i = 0; i < count; i++) {
+            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+            result += getTextFromBodyPart(bodyPart);
+        }
+        return result;
+    }
+
+    private String getTextFromBodyPart(
+            BodyPart bodyPart) throws IOException, MessagingException {
+
+        String result = "";
+        if (bodyPart.isMimeType("text/plain")) {
+            result = (String) bodyPart.getContent();
+        } else if (bodyPart.isMimeType("text/html")) {
+            String html = (String) bodyPart.getContent();
+            result = org.jsoup.Jsoup.parse(html).text();
+        } else if (bodyPart.getContent() instanceof MimeMultipart){
+            result = getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
+        }
+        return result;
     }
 
     public void receiveMail() {
@@ -61,38 +102,13 @@ public class receiveMail {
             inbox.open(Folder.READ_WRITE);
             Message[] messages = inbox.getMessages();
             Message latestMessage = messages[messages.length - 1];
-            this.date = latestMessage.getSentDate();
-            this.subject= latestMessage.getSubject();
-            try {
-                InternetAddress[] addresses = InternetAddress.parse(latestMessage.getFrom()[0].toString(), true);
-                for (InternetAddress address : addresses) {
-                    String email = address.getAddress();
-                    this.from=email;
-
-                }
-            } catch (AddressException e) {
-                e.printStackTrace();
-            }
-            this.content = getMessageContentAsString(latestMessage);
+            this.content = latestMessage.getSubject();
+            this.from = latestMessage.getFrom()[0].toString();
+            this.text = getTextFromMessage(latestMessage);
             inbox.close(false);
             store.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    private String getMessageContentAsString(Message message) throws MessagingException, IOException {
-        Object content = message.getContent();
-
-        if (content instanceof Multipart) {
-            Multipart multipart = (Multipart) content;
-            StringBuilder textContent = new StringBuilder();
-
-            for (int i = 0; i < multipart.getCount(); i++) {
-                BodyPart bodyPart = multipart.getBodyPart(i);
-                textContent.append((String) bodyPart.getContent());
-            }
-            return textContent.toString().split("\n")[0];
-        }
-        return this.content.toString();
     }
 }
