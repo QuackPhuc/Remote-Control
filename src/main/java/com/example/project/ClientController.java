@@ -40,14 +40,14 @@ public class ClientController {
     public void buttonShutdown(ActionEvent eventc1) throws IOException {
         System.out.println("shutdown");
         textControl = "shutdown";
-        send.send(textControl);
+//        send.send(textControl);
         buttonsd.setVisible(false);
     }
 
     public void buttonSleep(ActionEvent eventc1) throws IOException{
         System.out.println("sleep");
         textControl = "sleep";
-        send.send(textControl);
+//        send.send(textControl);
     }
     public void buttonRestart(ActionEvent eventc1) throws IOException{
         System.out.println("restart");

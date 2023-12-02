@@ -12,6 +12,4 @@ module com.example.projectremovecontrol {
     exports com.example.project;
     exports com.example.project.mail;
     opens com.example.project.mail to javafx.fxml;
-    exports mail;
-    opens mail to javafx.fxml;
 }

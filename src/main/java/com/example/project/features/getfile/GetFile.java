@@ -2,18 +2,12 @@ package com.example.project.features.getfile;
 import java.io.*;
 import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
-public class GetFile {public ArrayList<String> diskList;
-    private String path;
-    Scanner sc;
-    public GetFile(){
-        this.sc = new Scanner(System.in);
-    }
+public class GetFile {
+    public ArrayList<String> diskList;
 
-    public String getPath(){
-        return path;
-    }
 
     private ArrayList<String> driveList(){
         File[] computerDrives = File.listRoots();
@@ -34,8 +28,8 @@ public class GetFile {public ArrayList<String> diskList;
     private ArrayList<String> fileList(String path){
         ArrayList<String> output = new ArrayList<String>();
         File folder = new File(path);
-        for (File x: folder.listFiles()){
-            if ((x.isFile() || x.isDirectory()) && x.exists()) {
+        for (File x: Objects.requireNonNull(folder.listFiles())){
+            if ((x.isFile() || x.isDirectory()) && x.exists() && x.listFiles()!=null) {
                 int pos = x.toString().lastIndexOf("\\");
                 output.add(x.toString());
             }
