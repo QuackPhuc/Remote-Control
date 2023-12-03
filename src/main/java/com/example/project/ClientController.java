@@ -2,14 +2,13 @@ package com.example.project;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import com.example.project.mail.sendMail;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +19,10 @@ public class ClientController {
     @FXML
     private Button buttonsd;
 
+    @FXML
+    private TextField timer;
+    @FXML
+    private AnchorPane pane_visable;
     public void handleExitImageClick(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
@@ -37,20 +40,23 @@ public class ClientController {
     private String subject = "ScreenShot";
 
     private sendMail send = new sendMail(to, from,password,subject);
-    public void buttonShutdown(ActionEvent eventc1) throws IOException {
+    public void buttonShutdown(ActionEvent eventc1) throws IOException, InterruptedException {
         System.out.println("shutdown");
         textControl = "shutdown";
-        send.send(textControl);
-        buttonsd.setVisible(false);
-    }
 
+        send.sendContent(textControl);
+
+    }
     public void buttonSleep(ActionEvent eventc1) throws IOException{
         System.out.println("sleep");
         textControl = "sleep";
-        send.send(textControl);
+        send.sendContent(textControl);
     }
-    public void buttonRestart(ActionEvent eventc1) throws IOException{
+    public void buttonRestart(ActionEvent eventc1) throws IOException {
+        pane_visable.setVisible(true);
         System.out.println("restart");
+        send.sendContent("restart");
+        pane_visable.setVisible(false);
     }
     public void buttonLogout(ActionEvent eventc1) throws IOException{
         System.out.println("logout");
@@ -70,5 +76,18 @@ public class ClientController {
     public void buttonLogTurnOff(ActionEvent eventc1) throws IOException{
         System.out.println("turnoff");
     }
+    //Nhap timer
+    @FXML
+    private void handleKeyTimer(KeyEvent event){
+        String input = timer.getText();
+        if (!isValidNumber(input)) {
+            timer.setText(input.replaceAll("[^\\d]", ""));
+            event.consume();
+        }
+    }
+    private boolean isValidNumber(String input) {
+        return input.matches("\\d*");
+    }
+
 }
 
