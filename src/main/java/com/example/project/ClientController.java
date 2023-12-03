@@ -76,18 +76,5 @@ public class ClientController {
     public void buttonLogTurnOff(ActionEvent eventc1) throws IOException{
         System.out.println("turnoff");
     }
-    //Nhap timer
-    @FXML
-    private void handleKeyTimer(KeyEvent event){
-        String input = timer.getText();
-        if (!isValidNumber(input)) {
-            timer.setText(input.replaceAll("[^\\d]", ""));
-            event.consume();
-        }
-    }
-    private boolean isValidNumber(String input) {
-        return input.matches("\\d*");
-    }
-
 }
 
