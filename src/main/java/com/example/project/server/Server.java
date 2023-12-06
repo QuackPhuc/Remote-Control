@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Server {
+public class Server{
     private final String key = keyGenerator();
     static ArrayList<String> reqList = new ArrayList<String>();
     static ArrayList<String> mailList = new ArrayList<String>();
+
+    static ArrayList<String> numberList = new ArrayList<String>();
 
     private String keyGenerator(){
         Random r = new Random();
@@ -22,18 +24,20 @@ public class Server {
         return key;
     }
     public void run(){
-        getRequest gr = new getRequest(this.key);
-        sendResponse sr = new sendResponse(this.key);
+
 
         System.out.println("CODE: " + key);
-        while (true){
-            gr.run();
-            sr.run();
-        }
     }
     public static void main(String[]args) throws IOException {
         Server server = new Server();
         server.run();
+        getRequest gr = new getRequest(server.key);
+        sendResponse sr = new sendResponse(server.key);
+        while (true){
+            System.out.println(Server.mailList.toString()+Server.reqList.toString()+Server.numberList.toString());
+            gr.run();
+            sr.run();
+        }
 
     }
 }
