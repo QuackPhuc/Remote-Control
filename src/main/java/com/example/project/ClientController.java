@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import com.example.project.mail.sendMail;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -38,7 +39,7 @@ import java.util.Scanner;
 public class ClientController {
     public String textControl;
     @FXML private Button buttonsd, buttonsl, buttonres,buttonlog,buttonscrshot,buttonzoom,buttonsaveasScr, buttonLogTurnOn,buttonLogTurnOff,buttonsaveasLog,buttonStartPrc,buttonStartApp;
-    @FXML private Label responsePower;
+    @FXML private Label responsePower,responeScr;
     @FXML private ImageView scrshot;
     @FXML private TextArea LogText;
 
@@ -49,7 +50,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-
+    private String key = "";
     private String to = "phimphu8@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -88,20 +89,38 @@ public class ClientController {
         if (alert.getResult() == ButtonType.YES) {
             Platform.runLater(() -> {
                 buttonscrshot.setDisable(true);
+                responeScr.setText("Please wait a few minutes!");
             });
             Thread newThread = new Thread(() -> {
                 send.sendContent("screenshot");
-                //Xóa file cũ nếu có
-                /*File oldfile = new File("src/main/resources/com/example/project/image/screenshot.png");
-                oldfile.delete();*/
-                File file = new File("src/main/resources/com/example/project/image/screenshot.png");
-                Image image = new Image(file.toURI().toString());
-                Platform.runLater(() -> {
-                    scrshot.setImage(image);
-                    buttonscrshot.setDisable(false);
-                    buttonzoom.setDisable(false);
-                    buttonsaveasScr.setDisable(false);
-                });
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                File oldfile = new File("src/main/resources/com/example/project/file/screenshot.jpg");
+                oldfile.delete();
+                receiveMail receive = new receiveMail(username,password);
+                receive.receiveMail();
+                if (true){
+                    //Xóa file cũ nếu có
+                    File file = new File("src/main/resources/com/example/project/file/screenshot.jpg");
+                    Image image = new Image(file.toURI().toString());
+                    Platform.runLater(() -> {
+                        scrshot.setImage(image);
+                        buttonscrshot.setDisable(false);
+                        buttonzoom.setDisable(false);
+                        buttonsaveasScr.setDisable(false);
+                        responeScr.setText("Successful!");
+                    });
+                }
+                else{
+                    Platform.runLater(()->{
+                        buttonscrshot.setDisable(false);
+                        responeScr.setText("Failed, please send again!");
+                        responeScr.setTextFill(Color.RED);
+                    });
+                }
             });
             newThread.start();
         } else {
@@ -250,16 +269,38 @@ public class ClientController {
                 buttonsl.setDisable(true);
                 buttonres.setDisable(true);
                 buttonlog.setDisable(true);
+                responsePower.setText("Please wait a few minutes!");
             });
             Thread newThread = new Thread(() -> {
                 send.sendContent(pow);
-                Platform.runLater(() -> {
-                    buttonsd.setDisable(false);
-                    buttonsl.setDisable(false);
-                    buttonres.setDisable(false);
-                    buttonlog.setDisable(false);
-                    responsePower.setText("Successfull!");
-                });
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                receiveMail receive = new receiveMail(username,password);
+                receive.receiveMail();
+                if (receive.getContent()== key){
+                    if (receive.getText()=="successfull"){
+                        Platform.runLater(() -> {
+                            buttonsd.setDisable(false);
+                            buttonsl.setDisable(false);
+                            buttonres.setDisable(false);
+                            buttonlog.setDisable(false);
+                            responsePower.setText("Successfull!");
+                        });
+                    }
+                }
+                else {
+                    Platform.runLater(() -> {
+                        buttonsd.setDisable(false);
+                        buttonsl.setDisable(false);
+                        buttonres.setDisable(false);
+                        buttonlog.setDisable(false);
+                        responsePower.setText("Failed, please sendmail again!");
+                    });
+                }
+
             });
             newThread.start();
         } else {

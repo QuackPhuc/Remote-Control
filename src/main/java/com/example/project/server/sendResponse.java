@@ -145,7 +145,9 @@ public class sendResponse extends Thread{
                 case "9 ": {
                     counts[9]++;
                     GetFile gf = new GetFile();
+
                     if (Server.reqList.get(index).length()<=2){
+
                         String text = gf.listDrive();
                         sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
                         sm.sendContent(text);
