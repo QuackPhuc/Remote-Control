@@ -1,6 +1,11 @@
 package com.example.project.server;
 
 
+import com.example.project.features.list.ListPrc;
+import com.example.project.features.list.ListApp;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -33,9 +38,11 @@ public class Server {
             sr.run();
         }
     }
-    public static void main(String[]args){
-        Server server = new Server();
-        server.run();
+    public static void main(String[]args) throws IOException {
+        /*Server server = new Server();
+        server.run();*/
+        /*ListApp list = new ListApp();
+        File file = list.run();*/
     }
 }
 

@@ -6,6 +6,7 @@ module com.example.projectremovecontrol {
     requires org.jsoup;
     requires java.sql;
     requires com.github.kwhat.jnativehook;
+    requires com4j;
 
 
     opens com.example.project to javafx.fxml;

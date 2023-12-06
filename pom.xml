@@ -21,6 +21,16 @@
             <version>21-ea+24</version>
         </dependency>
         <dependency>
+            <groupId>org.jvnet.com4j</groupId>
+            <artifactId>com4j</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.8.0</version> <!-- Hoặc phiên bản mới nhất -->
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>21-ea+24</version>
@@ -57,6 +67,11 @@
             <groupId>com.github.kwhat</groupId>
             <artifactId>jnativehook</artifactId>
             <version>2.2.2</version> <!-- Use the latest version available -->
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21-ea+24</version>
         </dependency>
     </dependencies>
 

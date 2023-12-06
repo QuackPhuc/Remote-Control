@@ -6,8 +6,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class getRequest extends Thread{
-    final String DEFAULT_MAIL = "dangtanphat9a1@gmail.com";
-    final String DEFAULT_PASSWORD = "mylxemednkcccfzz";
+    final String DEFAULT_MAIL = "projectmangmaytinh2004@gmail.com";
+    final String DEFAULT_PASSWORD = "gorabwfzyfuqfkgy";
     receiveMail rm = new receiveMail(DEFAULT_MAIL,DEFAULT_PASSWORD);
 
     private String auth_code;
