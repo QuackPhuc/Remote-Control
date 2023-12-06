@@ -110,7 +110,39 @@
             </Tab>
             <Tab text="GetFile">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <HBox layoutX="79.0" layoutY="40.0" prefHeight="40.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Button fx:id="buttonReturnAddress" mnemonicParsing="false" onAction="#OnButtonReturnAddress" prefHeight="40.0" prefWidth="80.0" text="Return">
+                                 <HBox.margin>
+                                    <Insets left="10.0" right="30.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name=".VnArial" size="12.0" />
+                                 </font>
+                              </Button>
+                              <Label fx:id="table_address" disable="true" prefHeight="40.0" prefWidth="556.0">
+                                 <font>
+                                    <Font name=".VnArial" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="buttonGetAddress" mnemonicParsing="false" onAction="#onGetAddress" prefHeight="40.0" prefWidth="80.0" text="Get">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name=".VnArial" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <TableView fx:id="tableView" layoutX="140.0" layoutY="72.0" prefHeight="360.0" prefWidth="500.0">
+                          <columns>
+                            <TableColumn fx:id="address" prefWidth="499.20001220703125" text="Address" />
+                          </columns>
+                        </TableView>
+                     </children></AnchorPane>
                </content>
             </Tab>
             <Tab text="Manage">
