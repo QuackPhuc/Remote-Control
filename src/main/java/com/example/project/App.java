@@ -8,12 +8,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class App extends Application {
-
 
     private static Stage stage;
     public static Stage getStage() {
