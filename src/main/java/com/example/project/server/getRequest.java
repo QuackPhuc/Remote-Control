@@ -22,22 +22,23 @@ public class getRequest extends Thread{
         rm.receiveMail();
 
         if (!rm.getContent().equals(auth_code)){
-            System.out.println("Wrong code");
             return;
         }
-        if (Server.reqList.size()==0){
+        if (Server.reqList.isEmpty()){
             Server.reqList.add(rm.getText());
             Server.mailList.add(rm.getFrom());
+            Server.numberList.add(rm.getNumber());
+            return;
         }
 
-        while (!(Server.mailList.getLast().equals(rm.getFrom()) && Server.reqList.getLast().equals(rm.getText()))) {
-            rm.receiveMail();
+        while (!(Server.numberList.getLast().equals(rm.getNumber()))) {
             if (!rm.getContent().equals(auth_code)){
-                System.out.println("Wrong Code");
                 break;
             }
             Server.reqList.add(rm.getText());
+            Server.numberList.add(rm.getNumber());
             Server.mailList.add(rm.getFrom());
+            rm.receiveMail();
         }
     }
 }
