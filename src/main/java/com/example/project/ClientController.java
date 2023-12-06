@@ -37,7 +37,7 @@ import java.util.Scanner;
 
 public class ClientController {
     public String textControl;
-    @FXML private Button buttonsd, buttonsl, buttonres,buttonlog,buttonscrshot,buttonzoom,buttonsaveasScr, buttonLogTurnOn,buttonLogTurnOff,buttonsaveasLog,buttonStartPrc;
+    @FXML private Button buttonsd, buttonsl, buttonres,buttonlog,buttonscrshot,buttonzoom,buttonsaveasScr, buttonLogTurnOn,buttonLogTurnOff,buttonsaveasLog,buttonStartPrc,buttonStartApp;
     @FXML private Label responsePower;
     @FXML private ImageView scrshot;
     @FXML private TextArea LogText;
@@ -272,18 +272,18 @@ public class ClientController {
     }
     //Manager process
     @FXML
-    private TableView<TaskInfo> prc_Table;
+    private TableView<TaskInfo.Process> prc_Table;
     @FXML
-    private TableColumn<TaskInfo, String> prc_ProcessName;
+    private TableColumn<TaskInfo.Process, String> prc_ProcessName;
     @FXML
-    private TableColumn<TaskInfo, String> prc_PID;
+    private TableColumn<TaskInfo.Process, String> prc_PID;
     @FXML
-    private TableColumn<TaskInfo ,String> prc_SessionName;
+    private TableColumn<TaskInfo.Process ,String> prc_SessionName;
     @FXML
-    private TableColumn<TaskInfo, String> prc_Session;
+    private TableColumn<TaskInfo.Process, String> prc_Session;
     @FXML
-    private TableColumn<TaskInfo, String> prc_MemUsage;
-    private ObservableList<TaskInfo> ProcessList;
+    private TableColumn<TaskInfo.Process, String> prc_MemUsage;
+    private ObservableList<TaskInfo.Process> ProcessList;
 
     public void OnStartPrc(ActionEvent event){
         Platform.runLater(()->{
@@ -295,11 +295,11 @@ public class ClientController {
             Platform.runLater(()->{
                 System.out.println("ok");
                 ProcessList = FXCollections.observableArrayList();
-                prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo, String>("prc_ProcessName"));
-                prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo, String>("prc_PID"));
-                prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo, String>("prc_SessionName"));
-                prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo, String>("prc_Session"));
-                prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo, String>("prc_MemUsage"));
+                prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_ProcessName"));
+                prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_PID"));
+                prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_SessionName"));
+                prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_Session"));
+                prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_MemUsage"));
                 loadDataFromFile();
                 prc_Table.setItems(ProcessList);
                 buttonStartPrc.setDisable(false);
@@ -315,9 +315,8 @@ public class ClientController {
                 System.out.println(line);
                 String[] data = line.split("\\|");
                 if (data.length >= 5) {
-                    TaskInfo taskInfo = new TaskInfo(data[0], data[1], data[2], data[3], data[4]);
+                    TaskInfo.Process taskInfo = new TaskInfo.Process(data[0], data[1], data[2], data[3], data[4]);
                     ProcessList.add(taskInfo);
-
                 }
             }
         } catch (IOException e) {
@@ -325,5 +324,43 @@ public class ClientController {
         }
     }
     //Application
+    @FXML
+    private TableView<TaskInfo.Application> app_Table;
+    @FXML
+    private TableColumn<TaskInfo.Application,String> app_Name;
+    private ObservableList<TaskInfo.Application> Applist;
+    public void OnButtonStartApp(ActionEvent event){
+        Platform.runLater(()->{
+            buttonStartApp.setDisable(true);
+        });
+        Thread thread = new Thread(()->{
+            send.sendContent("getapplication");
+            //receive maill
+            Platform.runLater(()->{
+                System.out.println("ok");
+                Applist = FXCollections.observableArrayList();
+                app_Name.setCellValueFactory(new PropertyValueFactory<TaskInfo.Application, String>("app_Name"));
+                loadAppFromFile();
+                app_Table.setItems(Applist);
+                buttonStartApp.setDisable(false);
+            });
+        });
+        thread.start();
+    }
+    public void loadAppFromFile() {
+        File file = new File("src/main/resources/com/example/project/file/listApp.txt");
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            br.readLine();
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+                TaskInfo.Application taskinfo = new TaskInfo.Application(line);
+                Applist.add(taskinfo);
+                }
+            }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

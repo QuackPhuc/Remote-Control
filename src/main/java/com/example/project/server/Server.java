@@ -1,6 +1,7 @@
 package com.example.project.server;
 
 
+import com.example.project.features.getfile.GetFile;
 import com.example.project.features.list.ListPrc;
 import com.example.project.features.list.ListApp;
 
@@ -39,10 +40,9 @@ public class Server {
         }
     }
     public static void main(String[]args) throws IOException {
-        /*Server server = new Server();
-        server.run();*/
-        /*ListApp list = new ListApp();
-        File file = list.run();*/
+        Server server = new Server();
+        server.run();
+
     }
 }
 

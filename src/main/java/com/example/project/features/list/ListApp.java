@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ListApp {
-    /*private final String filePath = "src/main/resources/com/example/project/file/listApp.txt";
+    private final String filePath = "src/main/resources/com/example/project/file/listApp.txt";
     private File tempFile = new File(filePath);
 
     public File run() throws IOException {
@@ -57,21 +57,6 @@ public class ListApp {
             e.printStackTrace();
         }
         return tempFile;
-    }*/
-        public static void main(String[] args) {
-            try {
-                String line;
-                Process process = Runtime.getRuntime().exec(System.getenv("windir") + "\\system32\\" + "tasklist.exe /fo csv /nh");
-                BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    }
 
-                while ((line = input.readLine()) != null) {
-                    // Xử lý thông tin từ dòng "line" tại đây
-                    System.out.println(line);
-                }
-
-                input.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 }
