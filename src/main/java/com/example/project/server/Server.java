@@ -1,17 +1,12 @@
 package com.example.project.server;
 
-
-import com.example.project.features.getfile.GetFile;
-import com.example.project.features.list.ListPrc;
-import com.example.project.features.list.ListApp;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Server {
-    private String key = keyGenerator();
+    private final String key = keyGenerator();
     static ArrayList<String> reqList = new ArrayList<String>();
     static ArrayList<String> mailList = new ArrayList<String>();
 
@@ -23,15 +18,12 @@ public class Server {
         }
         return s;
     }
-    public void Server(){
-
-    }
     public String getKey(){
         return key;
     }
     public void run(){
         getRequest gr = new getRequest(this.key);
-        sendResponse sr = new sendResponse();
+        sendResponse sr = new sendResponse(this.key);
 
         System.out.println("CODE: " + key);
         while (true){
