@@ -69,12 +69,15 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <HBox alignment="CENTER" layoutX="84.0" layoutY="25.0" prefHeight="40.0" prefWidth="600.0" AnchorPane.leftAnchor="84.0" AnchorPane.topAnchor="25.0">
+                        <HBox alignment="CENTER" layoutX="84.0" layoutY="25.0" prefHeight="40.0" prefWidth="600.0" AnchorPane.leftAnchor="84.0" AnchorPane.topAnchor="10.0">
                            <children>
                               <Button fx:id="buttonscrshot" mnemonicParsing="false" onAction="#OnButtonScrshot" prefHeight="50.0" prefWidth="140.0" text="ScreenShot">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
-                                 </cursor></Button>
+                                 </cursor>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin></Button>
                               <Button fx:id="buttonzoom" disable="true" mnemonicParsing="false" onAction="#OnButtonZoom" prefHeight="50.0" prefWidth="140.0" text="Zoom">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -85,7 +88,12 @@
                                  </cursor></Button>
                            </children>
                         </HBox>
-                        <ImageView fx:id="scrshot" fitHeight="341.0" fitWidth="580.0" layoutX="116.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="scrshot" fitHeight="318.0" fitWidth="580.0" layoutX="116.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="130.0" />
+                        <Label fx:id="responeScr" disable="true" layoutX="293.0" layoutY="62.0" prefHeight="25.0" prefWidth="195.0" textFill="#35d932">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -114,7 +122,7 @@
                      <children>
                         <HBox layoutX="79.0" layoutY="40.0" prefHeight="40.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
                            <children>
-                              <Button fx:id="buttonReturnAddress" mnemonicParsing="false" onAction="#OnButtonReturnAddress" prefHeight="40.0" prefWidth="80.0" text="Return">
+                              <Button fx:id="buttonReturnAddress" mnemonicParsing="false"  prefHeight="40.0" prefWidth="80.0" text="Back">
                                  <HBox.margin>
                                     <Insets left="10.0" right="30.0" />
                                  </HBox.margin>
@@ -127,7 +135,7 @@
                                     <Font name=".VnArial" size="16.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="buttonGetAddress" mnemonicParsing="false" onAction="#onGetAddress" prefHeight="40.0" prefWidth="80.0" text="Get">
+                              <Button fx:id="buttonGetAddress" mnemonicParsing="false"  prefHeight="40.0" prefWidth="80.0" text="Get">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>

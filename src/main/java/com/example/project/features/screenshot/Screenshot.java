@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 public class Screenshot {
-    private final String path = "image.png";
+    private final String path = "screen.png";
 
     public File takeScreenShot(){
         File img = new File(path);
