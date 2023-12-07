@@ -16,7 +16,6 @@ public class receiveMail {
     private String content;
     private String from;
     private String text;
-    private int number;
 
     public receiveMail(String username, String password) {
         this.username = username;
@@ -31,9 +30,6 @@ public class receiveMail {
         return password;
     }
 
-    public String getNumber(){
-        return Integer.toString(number);
-    }
 
     public String getContent() {
         return content;
@@ -152,7 +148,6 @@ public class receiveMail {
             this.content = latestMessage.getSubject();
             this.from = latestMessage.getFrom()[0].toString();
             this.text = getTextFromMessage(latestMessage);
-            this.number = latestMessage.getMessageNumber();
             inbox.close(false);
             store.close();
         } catch (Exception e) {

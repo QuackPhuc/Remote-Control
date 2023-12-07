@@ -27,6 +27,11 @@ public class sendMail {
         this.password = password;
         this.subject = subject;
     }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
     public void sendContent(String content) {
         // Recipient's email ID needs to be mentioned.
 
@@ -69,7 +74,6 @@ public class sendMail {
 
             // Set Subject: header field
             message.setSubject(subject);
-
             // Now set the actual message
             message.setText(content);
 

@@ -1,0 +1,49 @@
+
+.root {
+    -fx-font-family: 'Arial', sans-serif;
+}
+
+.button {
+    -fx-background-color: 
+            radial-gradient(
+                center 50% 50%,
+                radius 100%,
+                rgba(255, 200, 255, 1) 0%,
+                rgba(135, 206, 250, 1) 50%,
+                rgba(255, 182, 193, 1) 100%);
+        -fx-text-fill: black;
+}
+
+.button:hover {
+    -fx-background-color: 
+        linear-gradient(#f6f6f6, #e6e6e6),
+        linear-gradient(#fcfcfc, #f9f9f9),
+        linear-gradient(#e7e7e7, #f7f7f7),
+        linear-gradient(#f7f7f7 50%, #eeeeee 100%);
+}
+
+.label {
+    -fx-font-size: 14px;
+}
+
+.tab-pane {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);
+}
+
+.table-view {
+    -fx-background-color: linear-gradient(to bottom, #fdfdfd, #f8f8f8);
+}
+
+.text-area, .text-field {
+    -fx-font-size: 12px;
+}
+#panepow{
+-fx-background-color:
+            radial-gradient(
+                center 50% 50%,
+                radius 100%,
+                rgba(255, 200, 255, 1) 0%,
+                rgba(135, 206, 250, 1) 50%,
+                rgba(255, 182, 193, 1) 100%);
+        -fx-text-fill: black;
+}
