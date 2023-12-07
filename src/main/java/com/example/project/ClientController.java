@@ -42,7 +42,7 @@ public class ClientController {
     @FXML private Label responsePower,responeScr;
     @FXML private ImageView scrshot;
     @FXML private TextArea LogText;
-
+    private int[] number = {0,0,0,0,0,0,0,0,0,0};
     public void handleExitImageClick(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
@@ -50,35 +50,35 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "";
-    private String to = "phimphu8@gmail.com";
+    private String key = "REFORUMP";
+    private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
-    private String from = "projectmangmaytinh2004@gmail.com";
-    private String username = "projectmangmaytinh2004@gmail.com";//change accordingly
-    private String password = "gorabwfzyfuqfkgy";//change accordingly
-    private String subject = "ScreenShot";
+    private String from = "phimphu8@gmail.com";
+    private String username = "phimphu8@gmail.com";//change accordingly
+    private String password = "ezhtzbrxnlkgyfmu";//change accordingly
+    private String subject = "";
     private sendMail send = new sendMail(to, from,password,subject);
     private receiveMail receive = new receiveMail(username,password);
     public void OnButtonShutdown(ActionEvent event) throws IOException {
         if (!buttonsd.isDisabled()){
-        comfirmRequest("shutdown");
+        comfirmRequest("5",5);
         System.out.println("ok");
         }
     }
     public void OnButtonSleep(ActionEvent event) throws IOException{
         if (!buttonsl.isDisabled()){
-            comfirmRequest("sleep");
+            comfirmRequest("8",8);
         }
     }
     public void OnButtonRestart(ActionEvent event) throws IOException{
         if (!buttonres.isDisable()){
-            comfirmRequest("restart");
+            comfirmRequest("6",6);
         }
     }
     public void OnButtonLogout(ActionEvent event) throws IOException{
         if (!buttonlog.isDisable()){
-            comfirmRequest("sleep");
+            comfirmRequest("7",7);
         }
     }
 
@@ -87,24 +87,27 @@ public class ClientController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to  screenshoot?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
+            number[4]+=1;
             Platform.runLater(() -> {
                 buttonscrshot.setDisable(true);
                 responeScr.setText("Please wait a few minutes!");
             });
             Thread newThread = new Thread(() -> {
-                send.sendContent("screenshot");
+                send.setSubject(key+ " "+ number[4]);
+                send.sendContent("4");
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                File oldfile = new File("src/main/resources/com/example/project/file/screenshot.jpg");
+                File oldfile = new File("src/main/resources/com/example/project/file/screen.png");
                 oldfile.delete();
                 receiveMail receive = new receiveMail(username,password);
                 receive.receiveMail();
-                if (true){
+                System.out.println(receive.getContent());
+                if (receive.getContent().equals(key+" "+ number[4])){
                     //Xóa file cũ nếu có
-                    File file = new File("src/main/resources/com/example/project/file/screenshot.jpg");
+                    File file = new File("src/main/resources/com/example/project/file/screen.png");
                     Image image = new Image(file.toURI().toString());
                     Platform.runLater(() -> {
                         scrshot.setImage(image);
@@ -204,26 +207,36 @@ public class ClientController {
             });
             Thread newThread = new Thread(() -> {
                 send.sendContent("keylogger turnoff");
-                receive.receiveMail();
-                String text = receive.getText();
-                File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
-                oldfile.delete();
-                File file = new File("src/main/resources/com/example/project/file/keylog.txt");
                 try {
-                    file.createNewFile();
-                    FileWriter write = new FileWriter(file);
-                    write.write(text);
-                    write.close();
-                } catch (IOException e) {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    LogText.setText(text);
-                    buttonLogTurnOff.setDisable(false);
-                    buttonsaveasLog.setDisable(false);
-                    buttonLogTurnOn.setDisable(false);
-                });
+                receiveMail receive = new receiveMail(username,password);
+                receive.receiveFile();
+                if (true){
+                    File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
+                    oldfile.delete();
+                    File file = new File("src/main/resources/com/example/project/file/keylog.txt");
+                    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                        StringBuilder content = new StringBuilder();
+                        String text;
+                        while ((text = br.readLine()) != null) {
+                            content.append(text).append("\n");
+                        }
+                        String finalText = text;
+                        Platform.runLater(() -> {
+                            LogText.setText(finalText);
+                            buttonLogTurnOff.setDisable(false);
+                            buttonsaveasLog.setDisable(false);
+                            buttonLogTurnOn.setDisable(false);
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             });
+
             newThread.start();
         }
     }
@@ -260,10 +273,11 @@ public class ClientController {
             });
         }
     }
-    public void comfirmRequest(String pow) {
+    public void comfirmRequest(String pow, int index) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to " + pow + "?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
+            number[index]+=1;
             Platform.runLater(() -> {
                 buttonsd.setDisable(true);
                 buttonsl.setDisable(true);
@@ -272,16 +286,17 @@ public class ClientController {
                 responsePower.setText("Please wait a few minutes!");
             });
             Thread newThread = new Thread(() -> {
+                send.setSubject(key +" "+ number[index]);
                 send.sendContent(pow);
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 receiveMail receive = new receiveMail(username,password);
                 receive.receiveMail();
-                if (receive.getContent()== key){
-                    if (receive.getText()=="successfull"){
+                if (receive.getContent().equals(key+" "+number[index])){
+                    if (receive.getText().equals("successfull")){
                         Platform.runLater(() -> {
                             buttonsd.setDisable(false);
                             buttonsl.setDisable(false);
@@ -327,26 +342,43 @@ public class ClientController {
     private ObservableList<TaskInfo.Process> ProcessList;
 
     public void OnStartPrc(ActionEvent event){
+        number[3]+=1;
         Platform.runLater(()->{
             buttonStartPrc.setDisable(true);
         });
         Thread thread = new Thread(()->{
-            send.sendContent("getprocess");
-            //receive maill
-            Platform.runLater(()->{
-                System.out.println("ok");
-                ProcessList = FXCollections.observableArrayList();
-                prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_ProcessName"));
-                prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_PID"));
-                prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_SessionName"));
-                prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_Session"));
-                prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_MemUsage"));
-                loadDataFromFile();
-                prc_Table.setItems(ProcessList);
+            send.setSubject(key +" "+ number[3]);
+            send.sendContent("3");
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            File oldfile = new File("src/main/resources/com/example/project/file/listPrc.txt");
+            oldfile.delete();
+            receiveMail receive = new receiveMail(username,password);
+            receive.receiveMail();
+            System.out.println(receive.getContent());
+            if (receive.getContent().equals(key+" "+number[3])){
+                Platform.runLater(()->{
+                    System.out.println("ok");
+                    ProcessList = FXCollections.observableArrayList();
+                    prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_ProcessName"));
+                    prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_PID"));
+                    prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_SessionName"));
+                    prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_Session"));
+                    prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_MemUsage"));
+                    loadDataFromFile();
+                    prc_Table.setItems(ProcessList);
+                    buttonStartPrc.setDisable(false);
+                });
+            }
+            else{
                 buttonStartPrc.setDisable(false);
-            });
+            }
         });
         thread.start();
+
     }
     public void loadDataFromFile() {
         File file = new File("src/main/resources/com/example/project/file/listPrc.txt");

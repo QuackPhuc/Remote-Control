@@ -1,5 +1,7 @@
 package com.example.project.server;
 
+import com.example.project.mail.sendMail;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,22 +27,22 @@ public class Server{
     }
     public void run(){
 
-
         System.out.println("CODE: " + key);
     }
-    public static void main(String[]args) throws IOException {
-        Server server = new Server();
+    public static void main(String[]args) throws IOException, InterruptedException {
+       Server server = new Server();
         server.run();
         getRequest gr = new getRequest(server.key);
         gr.start();
         sendResponse sr = new sendResponse(server.key);
         sr.start();
         while (true){
-            System.out.println(Server.mailList.toString()+Server.reqList.toString()+Server.numberList.toString());
-            gr.run();
-            sr.run();
+            Thread grThread = new Thread(()->{
+                gr.run();
+            });
+            grThread.start();
+            Thread.sleep(2000);
         }
-
     }
 }
 

@@ -199,6 +199,5 @@ public class sendResponse extends Thread{
             }
             index++;
         }
-
     }
 }
