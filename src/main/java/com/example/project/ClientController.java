@@ -50,7 +50,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "HDYBJSYX";
+    private String key = "GSULNBEL";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -96,7 +96,7 @@ public class ClientController {
                 send.setSubject(key+ " "+ number[4]);
                 send.sendContent("4");
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -105,7 +105,7 @@ public class ClientController {
                 receiveMail receive = new receiveMail(username,password);
                 receive.receiveMail();
                 System.out.println(receive.getContent());
-                if (receive.getContent()==key+ " "+ number[4]){
+                if (receive.getContent().equals(key+" "+ number[4])){
                     //Xóa file cũ nếu có
                     File file = new File("src/main/resources/com/example/project/file/screen.png");
                     Image image = new Image(file.toURI().toString());
@@ -289,14 +289,14 @@ public class ClientController {
                 send.setSubject(key +" "+ number[index]);
                 send.sendContent(pow);
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 receiveMail receive = new receiveMail(username,password);
                 receive.receiveMail();
-                if (receive.getContent()== key+" "+number[index]){
-                    if (receive.getText()=="successfull"){
+                if (receive.getContent().equals(key+" "+number[index])){
+                    if (receive.getText().equals("successfull")){
                         Platform.runLater(() -> {
                             buttonsd.setDisable(false);
                             buttonsl.setDisable(false);

