@@ -50,7 +50,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "OESIDPNX";
+    private String key = "HDYBJSYX";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -100,13 +100,14 @@ public class ClientController {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                File oldfile = new File("src/main/resources/com/example/project/file/screenshot.jpg");
+                File oldfile = new File("src/main/resources/com/example/project/file/screen.png");
                 oldfile.delete();
                 receiveMail receive = new receiveMail(username,password);
                 receive.receiveMail();
+                System.out.println(receive.getContent());
                 if (receive.getContent()==key+ " "+ number[4]){
                     //Xóa file cũ nếu có
-                    File file = new File("src/main/resources/com/example/project/file/screenshot.jpg");
+                    File file = new File("src/main/resources/com/example/project/file/screen.png");
                     Image image = new Image(file.toURI().toString());
                     Platform.runLater(() -> {
                         scrshot.setImage(image);

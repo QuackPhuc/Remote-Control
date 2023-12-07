@@ -22,6 +22,10 @@ public class receiveMail {
         this.password = password;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public String getUsername() {
         return username;
     }

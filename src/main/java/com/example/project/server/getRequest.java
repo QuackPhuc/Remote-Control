@@ -19,9 +19,8 @@ public class getRequest{
     }
     public void run() {
         rm.receiveMail();
-        System.out.println("da nhan");
-        if (rm.getContent().endsWith("\n")) {
-            System.out.println("Bo m lay m");;
+        if (rm.getText().endsWith("\n")) {
+            rm.setText(rm.getText().strip());
         }
         if (rm.getContent().split(" ").length>1){
             key  = rm.getContent().split(" ")[0];
