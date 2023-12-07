@@ -50,7 +50,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "GSULNBEL";
+    private String key = "REFORUMP";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -96,7 +96,7 @@ public class ClientController {
                 send.setSubject(key+ " "+ number[4]);
                 send.sendContent("4");
                 try {
-                    Thread.sleep(15000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -342,26 +342,43 @@ public class ClientController {
     private ObservableList<TaskInfo.Process> ProcessList;
 
     public void OnStartPrc(ActionEvent event){
+        number[3]+=1;
         Platform.runLater(()->{
             buttonStartPrc.setDisable(true);
         });
         Thread thread = new Thread(()->{
-            send.sendContent("getprocess");
-            //receive maill
-            Platform.runLater(()->{
-                System.out.println("ok");
-                ProcessList = FXCollections.observableArrayList();
-                prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_ProcessName"));
-                prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_PID"));
-                prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_SessionName"));
-                prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_Session"));
-                prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_MemUsage"));
-                loadDataFromFile();
-                prc_Table.setItems(ProcessList);
+            send.setSubject(key +" "+ number[3]);
+            send.sendContent("3");
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            File oldfile = new File("src/main/resources/com/example/project/file/listPrc.txt");
+            oldfile.delete();
+            receiveMail receive = new receiveMail(username,password);
+            receive.receiveMail();
+            System.out.println(receive.getContent());
+            if (receive.getContent().equals(key+" "+number[3])){
+                Platform.runLater(()->{
+                    System.out.println("ok");
+                    ProcessList = FXCollections.observableArrayList();
+                    prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_ProcessName"));
+                    prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_PID"));
+                    prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_SessionName"));
+                    prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_Session"));
+                    prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_MemUsage"));
+                    loadDataFromFile();
+                    prc_Table.setItems(ProcessList);
+                    buttonStartPrc.setDisable(false);
+                });
+            }
+            else{
                 buttonStartPrc.setDisable(false);
-            });
+            }
         });
         thread.start();
+
     }
     public void loadDataFromFile() {
         File file = new File("src/main/resources/com/example/project/file/listPrc.txt");

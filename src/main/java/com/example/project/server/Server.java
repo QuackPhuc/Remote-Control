@@ -39,7 +39,7 @@ public class Server{
                 gr.run();
             });
             grThread.start();
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         }
     }
 }

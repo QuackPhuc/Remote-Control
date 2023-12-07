@@ -34,10 +34,7 @@ public class getRequest{
                 Server.numberList.add(number);
                 System.out.println(Server.reqList.toString()+Server.numberList.toString());
                 sendResponse sr = new sendResponse(key);
-                Thread thread = new Thread(()->{
-                    sr.run();
-                });
-                thread.start();
+                sr.run();
             }
             else {
                 if ((!Server.reqList.getLast().equals(rm.getText())) || (!Server.mailList.contains(rm.getFrom())) || (!Server.numberList.contains(number))) {
@@ -46,10 +43,7 @@ public class getRequest{
                     Server.numberList.add(number);
                     System.out.println(Server.reqList.toString()+Server.numberList.toString());
                     sendResponse sr = new sendResponse(key);
-                    Thread thread = new Thread(()->{
-                        sr.run();
-                    });
-                    thread.start();
+                    sr.run();
                 }
             }
         }
