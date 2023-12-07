@@ -16,14 +16,11 @@ public class receiveMail {
     private String content;
     private String from;
     private String text;
+    private String number;
 
     public receiveMail(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public String getUsername() {
@@ -34,6 +31,9 @@ public class receiveMail {
         return password;
     }
 
+    public String getNumber(){
+        return number;
+    }
 
     public String getContent() {
         return content;
@@ -112,6 +112,7 @@ public class receiveMail {
             this.content = latestMessage.getSubject();
             this.from = latestMessage.getFrom()[0].toString();
             this.text = getTextFromMessage(latestMessage);
+            this.number = content.split(" ")[1];
             Object fileContent = latestMessage.getContent();
             if (fileContent instanceof Multipart) {
                 Multipart multipart = (Multipart) fileContent;
@@ -152,6 +153,7 @@ public class receiveMail {
             this.content = latestMessage.getSubject();
             this.from = latestMessage.getFrom()[0].toString();
             this.text = getTextFromMessage(latestMessage);
+            this.number = content.split(" ")[1];
             inbox.close(false);
             store.close();
         } catch (Exception e) {
