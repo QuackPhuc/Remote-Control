@@ -32,7 +32,9 @@ public class Server{
         Server server = new Server();
         server.run();
         getRequest gr = new getRequest(server.key);
+        gr.start();
         sendResponse sr = new sendResponse(server.key);
+        sr.start();
         while (true){
             System.out.println(Server.mailList.toString()+Server.reqList.toString()+Server.numberList.toString());
             gr.run();

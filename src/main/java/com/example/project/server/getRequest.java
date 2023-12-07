@@ -21,7 +21,7 @@ public class getRequest extends Thread{
 
         rm.receiveMail();
 
-        if (!rm.getContent().equals(auth_code)){
+        if (!rm.getContent().split(" ",-1)[0].equals(auth_code)){
             return;
         }
         if (Server.reqList.isEmpty()){
