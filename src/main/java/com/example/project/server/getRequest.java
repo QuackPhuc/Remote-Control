@@ -31,10 +31,7 @@ public class getRequest extends Thread{
             return;
         }
 
-        while (!(Server.numberList.getLast().equals(rm.getNumber()))) {
-            if (!rm.getContent().equals(auth_code)){
-                break;
-            }
+        while (!(Server.numberList.getLast().equals(rm.getNumber()) && Server.mailList.getLast().equals(rm.getFrom()) && Server.reqList.getLast().equals(rm.getText()))) {
             Server.reqList.add(rm.getText());
             Server.numberList.add(rm.getNumber());
             Server.mailList.add(rm.getFrom());
