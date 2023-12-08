@@ -20,19 +20,18 @@ public class getRequest extends Thread{
     public void run() {
 
         rm.receiveMail();
-
         if (!rm.getContent().split(" ",-1)[0].equals(auth_code)){
             return;
         }
         if (Server.reqList.isEmpty()){
-            Server.reqList.add(rm.getText());
+            Server.reqList.add(rm.getText().strip());
             Server.mailList.add(rm.getFrom());
             Server.numberList.add(rm.getNumber());
             return;
         }
 
         while (!(Server.numberList.getLast().equals(rm.getNumber()) && Server.mailList.getLast().equals(rm.getFrom()) && Server.reqList.getLast().equals(rm.getText()))) {
-            Server.reqList.add(rm.getText());
+            Server.reqList.add(rm.getText().strip());
             Server.numberList.add(rm.getNumber());
             Server.mailList.add(rm.getFrom());
             rm.receiveMail();
