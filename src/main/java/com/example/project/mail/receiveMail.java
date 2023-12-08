@@ -112,13 +112,14 @@ public class receiveMail {
             this.content = latestMessage.getSubject();
             this.from = latestMessage.getFrom()[0].toString();
             this.text = getTextFromMessage(latestMessage);
-            this.number = content.split(" ")[1];
+            if (content.contains(" ")) {
+                this.number = content.split(" ")[1];
+            }
             Object fileContent = latestMessage.getContent();
             if (fileContent instanceof Multipart) {
                 Multipart multipart = (Multipart) fileContent;
                 for (int j = 0; j < multipart.getCount(); j++) {
                     BodyPart bodyPart = multipart.getBodyPart(j);
-
                     if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
                         MimeBodyPart mimeBodyPart = (MimeBodyPart) bodyPart;
                         String fileName = mimeBodyPart.getFileName();
@@ -127,33 +128,6 @@ public class receiveMail {
                     }
                 }
             }
-            inbox.close(false);
-            store.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void receiveFile() {
-
-        Properties props = new Properties();
-        props.put("mail.store.protocol", "imaps");
-        props.put("mail.imaps.host", "imap.gmail.com");
-        props.put("mail.imaps.port", "993");
-        props.put("mail.imaps.starttls.enable", "true");
-        props.put("mail.imaps.ssl.protocols", "TLSv1.2");
-
-        try {
-            Session session = Session.getDefaultInstance(props, null);
-            Store store = session.getStore("imaps");
-            store.connect("imap.gmail.com", username, password);
-            Folder inbox = store.getFolder("INBOX");
-            inbox.open(Folder.READ_WRITE);
-            Message[] messages = inbox.getMessages();
-            Message latestMessage = messages[messages.length - 1];
-            this.content = latestMessage.getSubject();
-            this.from = latestMessage.getFrom()[0].toString();
-            this.text = getTextFromMessage(latestMessage);
-            this.number = content.split(" ")[1];
             inbox.close(false);
             store.close();
         } catch (Exception e) {

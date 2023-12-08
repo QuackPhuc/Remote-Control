@@ -1,5 +1,7 @@
 package com.example.project;
 
+import javafx.fxml.FXML;
+
 public class TaskInfo {
     public static class Process {
         private String prc_ProcessName;
@@ -70,6 +72,21 @@ public class TaskInfo {
         public Application(){}
         public void setApp_Name(String app_Name) {
             this.app_Name = app_Name;
+        }
+    }
+
+    public static class  address{
+        private String name_address;
+
+        public address(String name_address) {
+            this.name_address = name_address;
+        }
+
+        public String getName_address() {
+            return name_address;
+        }
+        public void setName_address(String name_address) {
+            this.name_address = name_address;
         }
     }
 }

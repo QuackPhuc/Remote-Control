@@ -20,7 +20,7 @@ public class sendResponse extends Thread{
 
 
     private String getMail(String mail){
-        if (!mail.contains("<")){
+        if (!mail.contains(String.valueOf('<'))){
             return mail;
         }
         return mail.substring(mail.indexOf('<')+1,mail.indexOf('>'));
@@ -146,14 +146,14 @@ public class sendResponse extends Thread{
 
                     }
                     else {
-                        String path = Server.reqList.get(index).substring(2);
+                        String path = Server.reqList.get(index).substring(2).strip();
                         File file = new File(path);
                         if (file.isDirectory()){
                             text = gf.listFile(file.getAbsolutePath());
                         }
                         else {
                             if (file.exists()){
-                                sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.get(index));
+                                sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.get(index) + " ok");
                                 sm.send(file);
                                 break;
                             }
