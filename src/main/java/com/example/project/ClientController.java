@@ -31,7 +31,7 @@ public class ClientController {
             buttonscrshot,buttonzoom,buttonsaveasScr,
             buttonLogTurnOn,buttonLogTurnOff,buttonsaveasLog,
             buttonStartPrc,buttonStartApp,
-            buttonBackAddress, buttonGetAddress;
+            buttonBackAddress, buttonGetAddress, buttonResGet,buttonSaveGetFile;
     @FXML private Label responsePower,responeScr, label_warning;
     @FXML private ImageView scrshot;
     @FXML private TextArea LogText;
@@ -43,7 +43,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "IVDLLCOT";
+    private String key = "FPQDKJTG";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -575,6 +575,13 @@ public class ClientController {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void OnButtonResGet(ActionEvent event){
+        Platform.runLater(()->{
+            buttonBackAddress.setDisable(true);
+        });
+        path=" ";
+
     }
 }
 
