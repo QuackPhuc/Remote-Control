@@ -1,7 +1,6 @@
 package com.example.project.mail;
 
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;

@@ -18,7 +18,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@client_stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.ClientController">
    <children>
-      <AnchorPane layoutX="103.0" layoutY="-7.0" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: #456456;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="103.0" layoutY="-7.0" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="exit" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#handleExitImageClick" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="7.0">
                <image>
@@ -31,7 +31,7 @@
         <tabs>
           <Tab text="Power Control">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane fx:id="pane_pow" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <Button id="buttonsd" fx:id="buttonsd" layoutX="225.0" layoutY="103.0" mnemonicParsing="false" onAction="#OnButtonShutdown" prefHeight="60.0" prefWidth="120.0" text="ShutDown">
                            <cursor>
@@ -96,15 +96,29 @@
                      <children>
                         <HBox alignment="CENTER" layoutX="82.0" layoutY="30.0" prefHeight="40.0" prefWidth="600.0" AnchorPane.leftAnchor="84.0" AnchorPane.topAnchor="25.0">
                            <children>
-                              <Button fx:id="buttonLogTurnOn" mnemonicParsing="false" onAction="#OnButtonLogTurnOn" prefHeight="50.0" prefWidth="140.0" text="Turn On" />
-                              <Button fx:id="buttonLogTurnOff" disable="true" mnemonicParsing="false" onAction="#OnButtonLogTurnOff" prefHeight="50.0" prefWidth="140.0" text="Turn Off" />
-                              <Button fx:id="buttonsaveasLog" disable="true" mnemonicParsing="false" onAction="#OnButtonSaveasLog" prefHeight="50.0" prefWidth="140.0" text="Save as" />
+                              <Button fx:id="buttonLogTurnOn" mnemonicParsing="false" onAction="#OnButtonLogTurnOn" prefHeight="50.0" prefWidth="140.0" text="Turn On">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
+                              <Button fx:id="buttonLogTurnOff" disable="true" mnemonicParsing="false" onAction="#OnButtonLogTurnOff" prefHeight="50.0" prefWidth="140.0" text="Turn Off">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
+                              <Button fx:id="buttonsaveasLog" disable="true" mnemonicParsing="false" onAction="#OnButtonSaveasLog" prefHeight="50.0" prefWidth="140.0" text="Save as">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
                            </children>
                         </HBox>
-                        <TextArea fx:id="LogText" disable="true" layoutX="195.0" layoutY="91.0" prefHeight="308.0" prefWidth="378.0">
+                        <TextArea fx:id="LogText" disable="true" layoutX="195.0" layoutY="133.0" prefHeight="266.0" prefWidth="378.0">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font></TextArea>
+                        <Label fx:id="text_keylog" layoutX="278.0" layoutY="83.0" prefHeight="31.0" prefWidth="253.0" textFill="#13d14f">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </content>
@@ -122,10 +136,13 @@
                                  <font>
                                     <Font name=".VnArial" size="12.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
-                              <Label fx:id="label_address" disable="true" prefHeight="40.0" prefWidth="556.0">
+                              <Label fx:id="text_address" disable="true" prefHeight="40.0" prefWidth="556.0" textFill="#14bf2e">
                                  <font>
-                                    <Font name=".VnArial" size="16.0" />
+                                    <Font size="18.0" />
                                  </font>
                               </Label>
                               <Button fx:id="buttonGetAddress" mnemonicParsing="false" onAction="#OnButtonGetAddress" prefHeight="40.0" prefWidth="80.0" text="Get">
@@ -135,6 +152,9 @@
                                  <font>
                                     <Font name=".VnArial" size="12.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                            </children>
                         </HBox>
@@ -143,13 +163,16 @@
                             <TableColumn fx:id="name_address" prefWidth="499.20001220703125" text="Address" />
                           </columns>
                         </TableView>
-                        <Label fx:id="label_warning" disable="true" layoutX="283.0" layoutY="70.0" prefHeight="26.0" prefWidth="240.0" />
+                        <Label fx:id="label_warning" layoutX="283.0" layoutY="70.0" prefHeight="26.0" prefWidth="240.0" />
                         <HBox layoutY="368.0" prefHeight="40.0" prefWidth="94.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0">
                            <children>
                               <Button fx:id="buttonResGet" mnemonicParsing="false" onAction="#OnButtonResGet" prefHeight="40.0" prefWidth="80.0" text="Res Get">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                            </children>
                         </HBox>
@@ -159,6 +182,9 @@
                                  <HBox.margin>
                                     <Insets right="20.0" />
                                  </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                            </children>
                         </HBox>
@@ -175,9 +201,20 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="40.0" prefWidth="800.0">
+                                          <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="800.0">
                                              <children>
-                                                <Button fx:id="buttonStartPrc" mnemonicParsing="false" onAction="#OnStartPrc" prefHeight="40.0" prefWidth="100.0" text="Start" />
+                                                <Label fx:id="text_prc" prefHeight="41.0" prefWidth="427.0" textFill="#12bf12">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button fx:id="buttonStartPrc" mnemonicParsing="false" onAction="#OnStartPrc" prefHeight="40.0" prefWidth="100.0" text="Start">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin></Button>
                                              </children>
                                           </HBox>
                                           <TableView fx:id="prc_Table" layoutX="-2.0" layoutY="60.0" prefHeight="343.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
@@ -197,9 +234,20 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="40.0" prefWidth="800.0">
+                                          <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="800.0">
                                              <children>
-                                                <Button fx:id="buttonStartApp" mnemonicParsing="false" onAction="#OnButtonStartApp" prefHeight="40.0" prefWidth="100.0" text="Start" />
+                                                <Label fx:id="text_app" prefHeight="34.0" prefWidth="458.0" textFill="#1ab744">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button fx:id="buttonStartApp" mnemonicParsing="false" onAction="#OnButtonStartApp" prefHeight="40.0" prefWidth="100.0" text="Start">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" right="10.0" />
+                                                   </HBox.margin></Button>
                                              </children>
                                           </HBox>
                                           <TableView fx:id="app_Table" layoutX="126.0" layoutY="75.0" prefHeight="326.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="45.0">

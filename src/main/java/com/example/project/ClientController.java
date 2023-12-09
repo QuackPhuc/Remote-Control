@@ -17,15 +17,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import com.example.project.mail.sendMail;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.awt.*;
 import javafx.scene.control.TextArea;
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-
+import com.example.project.LoginController;
 public class ClientController {
+    private String key;
+    private String username;
+    private String password;
     public String textControl;
     @FXML private Button buttonsd, buttonsl, buttonres,buttonlog,
             buttonscrshot,buttonzoom,buttonsaveasScr,
@@ -35,7 +40,8 @@ public class ClientController {
     @FXML private Label responsePower,responeScr, label_warning;
     @FXML private ImageView scrshot;
     @FXML private TextArea LogText;
-    private int[] number = {0,0,0,0,0,0,0,0,0,0};
+    @FXML private Label text_app, text_prc,text_address,text_keylog;
+    private int number = 0;
     public void handleExitImageClick(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
@@ -43,35 +49,41 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "XCAYJYYP";
+
+    public void initData(String username, String password,String code) {
+        this.username = username;
+        this.password = password;
+        this.key = code;
+        send = new sendMail(to, username,password,subject);
+    }
     private String to = "projectmangmaytinh2004@gmail.com";
 
-    // Sender's email ID needs to be mentioned
-    private String from = "phimphu8@gmail.com";
-    private String username = "phimphu8@gmail.com";//change accordingly
-    private String password = "ezhtzbrxnlkgyfmu";//change accordingly
     private String subject = "";
-    private sendMail send = new sendMail(to, from,password,subject);
+    private sendMail send;
+
     private receiveMail receive = new receiveMail(username,password);
+
+
     public void OnButtonShutdown(ActionEvent event) throws IOException {
+        System.out.println(username+password+key);
         if (!buttonsd.isDisabled()){
-        comfirmRequest("5",5);
+        comfirmRequest("1",1);
         System.out.println("ok");
         }
     }
     public void OnButtonSleep(ActionEvent event) throws IOException{
         if (!buttonsl.isDisabled()){
-            comfirmRequest("8",8);
+            comfirmRequest("4",4);
         }
     }
     public void OnButtonRestart(ActionEvent event) throws IOException{
         if (!buttonres.isDisable()){
-            comfirmRequest("6",6);
+            comfirmRequest("2",2);
         }
     }
     public void OnButtonLogout(ActionEvent event) throws IOException{
         if (!buttonlog.isDisable()){
-            comfirmRequest("7",7);
+            comfirmRequest("3",3);
         }
     }
 
@@ -81,15 +93,16 @@ public class ClientController {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
-            number[4] += 1;
+            number += 1;
             Platform.runLater(() -> {
                 buttonscrshot.setDisable(true);
                 responeScr.setText("Please wait a few minutes!");
+                responeScr.setTextFill(Color.GREEN);
             });
 
             Thread newThread = new Thread(() -> {
-                send.setSubject(key + " " + number[4]);
-                send.sendContent("4");
+                send.setSubject(key + " " + number);
+                send.sendContent("5");
                 File oldfile = new File("src/main/resources/com/example/project/file/screen.png");
                 oldfile.delete();
 
@@ -102,7 +115,7 @@ public class ClientController {
                     receive.receiveMail();
                     System.out.println(receive.getContent());
 
-                    if (receive.getContent().equals(key + " " + number[4])) {
+                    if (receive.getContent().equals(key + " " + number)) {
                         correctResponseReceived = true;
                         File file = new File("src/main/resources/com/example/project/file/screen.png");
                         Image image = new Image(file.toURI().toString());
@@ -112,8 +125,9 @@ public class ClientController {
                             buttonzoom.setDisable(false);
                             buttonsaveasScr.setDisable(false);
                             responeScr.setText("Successful!");
+                            responeScr.setTextFill(Color.GREEN);
                         });
-                        break;
+                        return;
                     }
 
                     try {
@@ -193,15 +207,17 @@ public class ClientController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to keylogger?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
-            number[1]+=1;
+            number+=1;
             Platform.runLater(() -> {
                 buttonLogTurnOn.setDisable(true);
             });
             Thread newThread = new Thread(() -> {
-                send.setSubject(key+ " "+ number[1]);
-                send.sendContent("1");
+                send.setSubject(key+ " "+ number);
+                send.sendContent("6");
                 Platform.runLater(() -> {
                     buttonLogTurnOff.setDisable(false);
+                    text_keylog.setText("Start get keylog!");
+                    text_keylog.setTextFill(Color.GREEN);
                 });
             });
             newThread.start();
@@ -210,23 +226,25 @@ public class ClientController {
         }
     }
     public void OnButtonLogTurnOff(ActionEvent event) throws IOException{
-        number[1]+=1;
+        number+=1;
         if (!buttonLogTurnOff.isDisable()){
             Platform.runLater(() -> {
                 buttonLogTurnOff.setDisable(true);
             });
             Thread newThread = new Thread(() -> {
-                send.setSubject(key+ " "+ number[1]);
-                send.sendContent("2");
-                long startTime = System.currentTimeMillis();
-                long timeout = 60000; // 60 seconds in milliseconds
-                boolean correctResponseReceived = false;
+                send.setSubject(key+ " "+ number);
+                send.sendContent("7");
                 File oldfile = new File("src/main/resources/com/example/project/file/keylog.txt");
                 oldfile.delete();
+                long startTime = System.currentTimeMillis();
+                long timeout = 60000; // 60 seconds in milliseconds
+
+                boolean correctResponseReceived = false;
                 while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived){
                     receiveMail receive = new receiveMail(username,password);
                     receive.receiveMail();
-                    if (receive.getContent().equals(key+" "+ number[1])){
+                    System.out.println(receive.getContent());
+                    if (receive.getContent().equals(key+" "+ number)){
                         File file = new File("src/main/resources/com/example/project/file/keylog.txt");
                         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                             StringBuilder content = new StringBuilder();
@@ -234,22 +252,33 @@ public class ClientController {
                             while ((text = br.readLine()) != null) {
                                 content.append(text).append("\n");
                             }
+                            System.out.println("hop le");
                             Platform.runLater(() -> {
                                 LogText.setText(String.valueOf(content));
                                 buttonLogTurnOff.setDisable(false);
                                 buttonsaveasLog.setDisable(false);
                                 buttonLogTurnOn.setDisable(false);
+                                text_keylog.setText("");
                             });
-                            break;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        return;
                     }
                     try {
                         Thread.sleep(5000); // Wait for 1 second before checking again
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                }
+                if (!correctResponseReceived){
+                    Platform.runLater(()->{
+                        System.out.println("Khong hop le");
+                        buttonLogTurnOn.setDisable(false);
+                        buttonLogTurnOff.setDisable(true);
+                        text_keylog.setText("Failed, send mail again!");
+                        text_keylog.setTextFill(Color.RED);
+                    });
                 }
             });
             newThread.start();
@@ -292,16 +321,17 @@ public class ClientController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to " + pow + "?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
-            number[index]+=1;
+            number+=1;
             Platform.runLater(() -> {
                 buttonsd.setDisable(true);
                 buttonsl.setDisable(true);
                 buttonres.setDisable(true);
                 buttonlog.setDisable(true);
                 responsePower.setText("Please wait a few minutes!");
+                responsePower.setTextFill(Color.GREEN);
             });
             Thread newThread = new Thread(() -> {
-                send.setSubject(key +" "+ number[index]);
+                send.setSubject(key +" "+ number);
                 send.sendContent(pow);
                 long startTime = System.currentTimeMillis();
                 long timeout = 60000; // 60 seconds in milliseconds
@@ -310,7 +340,7 @@ public class ClientController {
                 while (System.currentTimeMillis() - startTime < timeout && !correctResponseReceived) {
                     receiveMail receive = new receiveMail(username,password);
                     receive.receiveMail();
-                    if (receive.getContent().equals(key+" "+number[index])){
+                    if (receive.getContent().equals(key+" "+number)){
                         if (receive.getText().equals("successfull")){
                             Platform.runLater(() -> {
                                 buttonsd.setDisable(false);
@@ -318,9 +348,10 @@ public class ClientController {
                                 buttonres.setDisable(false);
                                 buttonlog.setDisable(false);
                                 responsePower.setText("Successfull!");
+                                responsePower.setTextFill(Color.GREEN);
                             });
                         }
-                        break;
+                        return;
                     }
                     try {
                         Thread.sleep(5000); // Wait for 1 second before checking again
@@ -364,13 +395,15 @@ public class ClientController {
     private ObservableList<TaskInfo.Process> ProcessList;
 
     public void OnStartPrc(ActionEvent event){
-        number[3]+=1;
+        number+=1;
         Platform.runLater(()->{
             buttonStartPrc.setDisable(true);
+            text_prc.setText("Please wait for a few seconds!");
+            text_prc.setTextFill(Color.GREEN);
         });
         Thread thread = new Thread(()->{
-            send.setSubject(key +" "+ number[3]);
-            send.sendContent("3");
+            send.setSubject(key +" "+ number);
+            send.sendContent("9");
 
             File oldfile = new File("src/main/resources/com/example/project/file/listPrc.txt");
             oldfile.delete();
@@ -382,7 +415,7 @@ public class ClientController {
                 receiveMail receive = new receiveMail(username, password);
                 receive.receiveMail();
                 System.out.println(receive.getContent());
-                if (receive.getContent().equals(key + " " + number[3])) {
+                if (receive.getContent().equals(key + " " + number)) {
                     Platform.runLater(() -> {
                         System.out.println("ok");
                         ProcessList = FXCollections.observableArrayList();
@@ -394,8 +427,9 @@ public class ClientController {
                         loadDataFromFile();
                         prc_Table.setItems(ProcessList);
                         buttonStartPrc.setDisable(false);
+                        text_prc.setText("");
                     });
-                    break;
+                    return;
                 }
                 try {
                     Thread.sleep(5000); // Wait for 1 second before checking again
@@ -404,7 +438,12 @@ public class ClientController {
                 }
             }
             if (!correctResponseReceived){
-                buttonStartPrc.setDisable(false);
+                Platform.runLater(()->{
+                    buttonStartPrc.setDisable(false);
+                    text_app.setText("Failed, send mail again!");
+                    text_app.setTextFill(Color.RED);
+                });
+
             }
         });
         thread.start();
@@ -432,13 +471,15 @@ public class ClientController {
     private TableColumn<TaskInfo.Application,String> app_Name;
     private ObservableList<TaskInfo.Application> Applist;
     public void OnButtonStartApp(ActionEvent event){
-        number[0]+=1;
+        number+=1;
         Platform.runLater(()->{
             buttonStartApp.setDisable(true);
+            text_app.setText("Please wait for a few seconds!");
+            text_app.setTextFill(Color.GREEN);
         });
         Thread thread = new Thread(()->{
-            send.setSubject(key +" "+ number[0]);
-            send.sendContent("0");
+            send.setSubject(key +" "+ number);
+            send.sendContent("10");
             long startTime = System.currentTimeMillis();
             long timeout = 60000; // 60 seconds in milliseconds
 
@@ -449,7 +490,7 @@ public class ClientController {
                 receiveMail receive = new receiveMail(username, password);
                 receive.receiveMail();
                 System.out.println(receive.getContent());
-                if (receive.getContent().equals(key + " " + number[0])) {
+                if (receive.getContent().equals(key + " " + number)) {
                     Platform.runLater(() -> {
                         System.out.println("ok");
                         Applist = FXCollections.observableArrayList();
@@ -457,8 +498,9 @@ public class ClientController {
                         loadAppFromFile();
                         app_Table.setItems(Applist);
                         buttonStartApp.setDisable(false);
+                        text_app.setText("");
                     });
-                    break;
+                    return;
                 }
                 try {
                     Thread.sleep(5000);
@@ -467,7 +509,11 @@ public class ClientController {
                 }
             }
             if (!correctResponseReceived){
-                buttonStartApp.setDisable(false);
+                Platform.runLater(()->{
+                    buttonStartApp.setDisable(false);
+                    text_app.setText("Failed, send mail again!");
+                    text_app.setTextFill(Color.RED);
+                });
             }
         });
         thread.start();
@@ -509,21 +555,24 @@ public class ClientController {
                 name_address.setCellValueFactory(new PropertyValueFactory<TaskInfo.address, String>("name_address"));
                 table_address.setItems(Addresslist);
                 buttonBackAddress.setDisable(true);
+                text_address.setText("");
             });
         }
     }
     public void OnButtonGetAddress(ActionEvent event){
-        number[9]+=1;
+        number+=1;
         Platform.runLater(()->{
             buttonGetAddress.setDisable(true);
+            text_address.setText("Please wait for a few seconds!");
+            text_address.setTextFill(Color.GREEN);
         });
-        send.setSubject(key +" "+ number[9]);
+        send.setSubject(key +" "+ number);
 
         TaskInfo.address selectedItem = table_address.getSelectionModel().getSelectedItem();
         if (selectedItem == null){
             if (path.equals(" ")){
                 old_path = path;
-                send.sendContent("9");
+                send.sendContent("8");
             }
             else {
                 Platform.runLater(()->{
@@ -536,7 +585,7 @@ public class ClientController {
         else {
             old_path = path;
             path = " "+selectedItem.getName_address();
-            send.sendContent("9"+ path);
+            send.sendContent("8"+ path);
             System.out.println("Selected text: " + selectedItem.getName_address());
             Platform.runLater(()->{
                 label_warning.setText("");
@@ -552,7 +601,7 @@ public class ClientController {
             receiveMail receive = new receiveMail(username, password);
             receive.receiveMail();
             System.out.println(receive.getContent());
-            if (receive.getContent().equals(key + " " + number[9]+ " ok")){
+            if (receive.getContent().equals(key + " " + number+ " ok")){
                 path="";
                 Addresslist.clear();
                 AddresslistOld.clear();
@@ -566,9 +615,9 @@ public class ClientController {
                 System.out.println("Nhan file roi");
                 nameFile = receive.getNameFile();
                 // Luu file luon
-                break;
+                return;
             }
-            if (receive.getContent().equals(key + " " + number[9])){
+            if (receive.getContent().equals(key + " " + number)){
                 Platform.runLater(() -> {
                     System.out.println("ok");
                     if (Addresslist!=null){
@@ -581,8 +630,10 @@ public class ClientController {
                     buttonGetAddress.setDisable(false);
                     buttonBackAddress.setDisable(false);
                     buttonSaveGetFile.setDisable(true);
+                    text_address.setText("Please select file or folder!");
+                    text_address.setTextFill(Color.GREEN);
                 });
-                break;
+                return;
             }
             try {
                 Thread.sleep(5000);
@@ -591,7 +642,11 @@ public class ClientController {
             }
         }
         if (!correctResponseReceived){
-            buttonGetAddress.setDisable(false);
+            Platform.runLater(()->{
+                buttonGetAddress.setDisable(false);
+                text_address.setText("Failed, send mail again!");
+                text_address.setTextFill(Color.RED);
+            });
         }
     }
     public void loadAddressFromFile() {
@@ -616,6 +671,7 @@ public class ClientController {
             buttonSaveGetFile.setDisable(true);
             name_address.setCellValueFactory(new PropertyValueFactory<TaskInfo.address, String>("name_address"));
             table_address.setItems(Addresslist);
+            text_address.setText("");
 
         });
     }

@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.File;
@@ -13,30 +14,21 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class App extends Application {
-
     private static Stage stage;
     public static Stage getStage() {
         return stage;
     }
-
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(App.class.getResource( "login.fxml"));
-        primaryStage.setScene(new Scene(root, 320, 240));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource( "login.fxml"));
+        Parent root =  loader.load();
+
+        primaryStage.setScene(new Scene(root, 320, 350));
         primaryStage.centerOnScreen();
         primaryStage.setResizable(false);
         primaryStage.setTitle("LOGIN");
         primaryStage.show();
         stage = primaryStage;
     }
-    public void setClient(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(App.class.getResource( "client.fxml"));
-
-        primaryStage.setScene(new Scene(root, 800, 500));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.centerOnScreen();
-        primaryStage.setTitle("RemoveControll");
-
-        primaryStage.show();
-    }
 }
+

@@ -47,3 +47,8 @@
                 rgba(255, 182, 193, 1) 100%);
         -fx-text-fill: black;
 }
+#pane_pow{
+    -fx-background-color:
+        linear-gradient(to right bottom, #565467, #5b5178, #644c87, #714592, #83389a, #823ba3, #803fac, #7d43b5, #6056be, #4364c1, #266fbe, #1778b7);
+
+}
