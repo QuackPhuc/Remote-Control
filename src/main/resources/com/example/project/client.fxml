@@ -146,7 +146,7 @@
                         <Label fx:id="label_warning" disable="true" layoutX="283.0" layoutY="70.0" prefHeight="26.0" prefWidth="240.0" />
                         <HBox layoutY="368.0" prefHeight="40.0" prefWidth="94.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0">
                            <children>
-                              <Button fx:id="buttonResGet" mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" text="Res Get">
+                              <Button fx:id="buttonResGet" mnemonicParsing="false" onAction="#OnButtonResGet" prefHeight="40.0" prefWidth="80.0" text="Res Get">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
@@ -155,7 +155,7 @@
                         </HBox>
                         <HBox alignment="TOP_RIGHT" layoutX="685.0" layoutY="367.0" prefHeight="40.0" prefWidth="114.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <Button fx:id="buttonSaveGetFile" disable="true" mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" text="Save as">
+                              <Button fx:id="buttonSaveGetFile" disable="true" mnemonicParsing="false" onAction="#OnButtonSaveGetFile" prefHeight="40.0" prefWidth="80.0" text="Save as">
                                  <HBox.margin>
                                     <Insets right="20.0" />
                                  </HBox.margin>

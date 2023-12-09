@@ -43,7 +43,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "IVDLLCOT";
+    private String key = "XCAYJYYP";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
@@ -493,11 +493,24 @@ public class ClientController {
     private TableView <TaskInfo.address> table_address;
     @FXML
     private TableColumn<TaskInfo.address,String> name_address;
-    private ObservableList<TaskInfo.address> Addresslist;
-    private String path=" ";
-    private Boolean isGetAddress = false;
+    private ObservableList<TaskInfo.address> Addresslist, AddresslistOld;
+    private String path=" ", old_path=" ";
+    private String nameFile;
     public void OnButtonBackAddress(ActionEvent event){
-
+        if (!buttonBackAddress.isDisable()){
+            path = old_path;
+            Platform.runLater(()->{
+                if (AddresslistOld!=null) {
+                    Addresslist = FXCollections.observableArrayList(AddresslistOld);
+                }
+                else {
+                    Addresslist.clear();
+                }
+                name_address.setCellValueFactory(new PropertyValueFactory<TaskInfo.address, String>("name_address"));
+                table_address.setItems(Addresslist);
+                buttonBackAddress.setDisable(true);
+            });
+        }
     }
     public void OnButtonGetAddress(ActionEvent event){
         number[9]+=1;
@@ -505,23 +518,29 @@ public class ClientController {
             buttonGetAddress.setDisable(true);
         });
         send.setSubject(key +" "+ number[9]);
-        if (number[9]==1){
-            send.sendContent("9");
-        }
+
         TaskInfo.address selectedItem = table_address.getSelectionModel().getSelectedItem();
-        if ((selectedItem != null)&&(number[9]!=1)) {
+        if (selectedItem == null){
+            if (path.equals(" ")){
+                old_path = path;
+                send.sendContent("9");
+            }
+            else {
+                Platform.runLater(()->{
+                    label_warning.setText("Please, choose address!");
+                    buttonGetAddress.setDisable(false);
+                });
+                return;
+            }
+        }
+        else {
+            old_path = path;
             path = " "+selectedItem.getName_address();
             send.sendContent("9"+ path);
             System.out.println("Selected text: " + selectedItem.getName_address());
-        }
-        else {
-           if (number[9]!=1){
-               label_warning.setText("Please, choose address!");
-               Platform.runLater(()->{
-                   buttonGetAddress.setDisable(false);
-               });
-               return;
-           }
+            Platform.runLater(()->{
+                label_warning.setText("");
+            });
         }
         long startTime = System.currentTimeMillis();
         long timeout = 60000; // 60 seconds in milliseconds
@@ -534,22 +553,34 @@ public class ClientController {
             receive.receiveMail();
             System.out.println(receive.getContent());
             if (receive.getContent().equals(key + " " + number[9]+ " ok")){
-                number[9]=0;
                 path="";
+                Addresslist.clear();
+                AddresslistOld.clear();
                 Platform.runLater(()->{
                     buttonGetAddress.setDisable(false);
+                    buttonBackAddress.setDisable(true);
+                    buttonSaveGetFile.setDisable(false);
+                    name_address.setCellValueFactory(new PropertyValueFactory<TaskInfo.address, String>("name_address"));
+                    table_address.setItems(Addresslist);
                 });
                 System.out.println("Nhan file roi");
+                nameFile = receive.getNameFile();
                 // Luu file luon
+                break;
             }
             if (receive.getContent().equals(key + " " + number[9])){
                 Platform.runLater(() -> {
                     System.out.println("ok");
+                    if (Addresslist!=null){
+                        AddresslistOld = FXCollections.observableArrayList(Addresslist);
+                    }
                     Addresslist = FXCollections.observableArrayList();
                     name_address.setCellValueFactory(new PropertyValueFactory<TaskInfo.address, String>("name_address"));
                     loadAddressFromFile();
                     table_address.setItems(Addresslist);
                     buttonGetAddress.setDisable(false);
+                    buttonBackAddress.setDisable(false);
+                    buttonSaveGetFile.setDisable(true);
                 });
                 break;
             }
@@ -577,13 +608,49 @@ public class ClientController {
         }
     }
     public void OnButtonResGet(ActionEvent event){
+        Addresslist.clear();
+        AddresslistOld.clear();
+        path=" ";
         Platform.runLater(()->{
             buttonBackAddress.setDisable(true);
+            buttonSaveGetFile.setDisable(true);
+            name_address.setCellValueFactory(new PropertyValueFactory<TaskInfo.address, String>("name_address"));
+            table_address.setItems(Addresslist);
+
         });
-        path=" ";
     }
     public void OnButtonSaveGetFile(ActionEvent event){
+        System.out.println("saveas");
+        String sourceFilePath = "src/main/resources/com/example/project/file/"+nameFile;
+        if (!buttonSaveGetFile.isDisable()){
+            Platform.runLater(()->{
+                FileDialog fileDialog = new FileDialog(new Frame(), "Save As", FileDialog.SAVE);
+                fileDialog.setVisible(true);
 
+                // Get the selected file and directory
+                String selectedFile = fileDialog.getFile();
+                String selectedDirectory = fileDialog.getDirectory();
+
+                // Check if the user canceled the file dialog
+                if (selectedFile == null || selectedDirectory == null) {
+                    System.out.println("Save operation canceled by the user.");
+                    return;
+                }
+
+                // Construct the destination path
+                Path destinationPath = Path.of(selectedDirectory, selectedFile);
+
+                try {
+                    // Copy the file to the chosen destination
+                    Files.copy(Path.of(sourceFilePath), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+                    System.out.println("File saved successfully to: " + destinationPath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Error saving file.");
+                }
+            });
+        }
     }
 }
 

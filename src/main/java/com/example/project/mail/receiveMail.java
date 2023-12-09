@@ -17,6 +17,7 @@ public class receiveMail {
     private String from;
     private String text;
     private String number;
+    private String nameFile;
 
     public receiveMail(String username, String password) {
         this.username = username;
@@ -45,6 +46,10 @@ public class receiveMail {
 
     public String getFrom() {
         return from;
+    }
+
+    public String getNameFile() {
+        return nameFile;
     }
 
     private String getTextFromMessage(Message message) throws IOException, MessagingException {
@@ -123,6 +128,7 @@ public class receiveMail {
                     if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
                         MimeBodyPart mimeBodyPart = (MimeBodyPart) bodyPart;
                         String fileName = mimeBodyPart.getFileName();
+                        this.nameFile = fileName;
                         File fileToSave = new File("src/main/resources/com/example/project/file/" + fileName);
                         mimeBodyPart.saveFile(fileToSave);
                     }
