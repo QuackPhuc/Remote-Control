@@ -29,7 +29,7 @@ public class GetFile {
         ArrayList<String> output = new ArrayList<String>();
         File folder = new File(path);
         for (File x: Objects.requireNonNull(folder.listFiles())){
-            if ((x.isFile() || x.isDirectory()) && x.exists() && x.listFiles()!=null) {
+            if ((x.isFile() || x.isDirectory()) && x.exists() && (x.isFile() || x.listFiles()!=null)) {
                 int pos = x.toString().lastIndexOf("\\");
                 output.add(x.toString());
             }
