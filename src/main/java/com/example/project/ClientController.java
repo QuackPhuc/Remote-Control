@@ -43,7 +43,7 @@ public class ClientController {
             System.exit(0);
         }
     }
-    private String key = "IVDLLCOT";
+    private String key = "FPQDKJTG";
     private String to = "projectmangmaytinh2004@gmail.com";
 
     // Sender's email ID needs to be mentioned
