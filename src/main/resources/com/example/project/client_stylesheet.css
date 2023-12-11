@@ -52,3 +52,30 @@
         linear-gradient(to right bottom, #565467, #5b5178, #644c87, #714592, #83389a, #823ba3, #803fac, #7d43b5, #6056be, #4364c1, #266fbe, #1778b7);
 
 }
+
+
+.tab-header-background {
+    -fx-background-color: #d3d3d3;
+}
+
+.tab {
+    -fx-background-color: #a9a9a9;
+    -fx-padding: 5px;
+}
+
+.tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-font-weight: bold;
+}
+.tab-pane .tab-header-area .headers-region {
+    -fx-alignment: center;
+}
+
+.tab-pane .tab-header-area {
+    -fx-pref-height: 40px;
+    -fx-padding: 5px;
+}
+
+.tab {
+    -fx-pref-width: 120px; /* Điều chỉnh theo nhu cầu */
+}

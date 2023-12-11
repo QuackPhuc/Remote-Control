@@ -27,6 +27,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import com.example.project.LoginController;
+
+import javax.swing.plaf.TableHeaderUI;
+
 public class ClientController {
     private String key;
     private String username;
@@ -214,6 +217,11 @@ public class ClientController {
             Thread newThread = new Thread(() -> {
                 send.setSubject(key+ " "+ number);
                 send.sendContent("6");
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 Platform.runLater(() -> {
                     buttonLogTurnOff.setDisable(false);
                     text_keylog.setText("Start get keylog!");
@@ -566,6 +574,7 @@ public class ClientController {
             text_address.setText("Please wait for a few seconds!");
             text_address.setTextFill(Color.GREEN);
         });
+        Thread newthread = new Thread(()->{
         send.setSubject(key +" "+ number);
 
         TaskInfo.address selectedItem = table_address.getSelectionModel().getSelectedItem();
@@ -648,6 +657,8 @@ public class ClientController {
                 text_address.setTextFill(Color.RED);
             });
         }
+        });
+        newthread.start();
     }
     public void loadAddressFromFile() {
         File file = new File("src/main/resources/com/example/project/file/filelists.txt");
@@ -664,7 +675,9 @@ public class ClientController {
     }
     public void OnButtonResGet(ActionEvent event){
         Addresslist.clear();
+        if (AddresslistOld!=null){
         AddresslistOld.clear();
+        }
         path=" ";
         Platform.runLater(()->{
             buttonBackAddress.setDisable(true);

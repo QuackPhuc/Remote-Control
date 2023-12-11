@@ -19,8 +19,9 @@ public class sendMail {
     private String password;
     private String content;
     private String subject;
+    public Boolean check = true;
 
-    public sendMail(String to, String from, String password, String subject){
+    public sendMail(String to, String from, String password, String subject) {
         this.to = to;
         this.from = from;
         this.password = password;
@@ -82,8 +83,13 @@ public class sendMail {
             // Send message
             Transport.send(message);
             System.out.println("Sent message successfully....");
+            check = true;
+        } catch (AuthenticationFailedException e) {
+            System.out.println("Wrong username or password!");
+            check = false;
         } catch (MessagingException mex) {
             mex.printStackTrace();
+            check = false;
         }
 
     }
