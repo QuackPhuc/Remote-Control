@@ -140,7 +140,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Label fx:id="text_address" disable="true" prefHeight="40.0" prefWidth="556.0" textFill="#14bf2e">
+                              <Label fx:id="text_address" prefHeight="40.0" prefWidth="556.0" textFill="#14bf2e">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
