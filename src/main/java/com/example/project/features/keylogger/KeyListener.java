@@ -6,9 +6,11 @@ import java.util.ArrayList;
 public class KeyListener implements NativeKeyListener {
 
     private ArrayList<String> data = new ArrayList<String>();
+    private boolean isRunning;
     public void nativeKeyPressed(NativeKeyEvent e) {
-        data.add(NativeKeyEvent.getKeyText(e.getKeyCode()));
-
+        if (isRunning) {
+            data.add(NativeKeyEvent.getKeyText(e.getKeyCode()));
+        }
 //        if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
 //            try {
 //                GlobalScreen.unregisterNativeHook();
@@ -18,6 +20,14 @@ public class KeyListener implements NativeKeyListener {
 //                nativeHookException.printStackTrace();
 //            }
 //        }
+    }
+
+    public void disable(){
+        isRunning = false;
+    }
+
+    public void able(){
+        isRunning = true;
     }
 
     public String getText(){
