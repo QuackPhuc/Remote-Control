@@ -17,6 +17,7 @@ public class receiveMail {
     private String from;
     private String text;
     private String number;
+    private int count;
     private String nameFile;
 
     public receiveMail(String username, String password) {
@@ -119,6 +120,10 @@ public class receiveMail {
             this.text = getTextFromMessage(latestMessage);
             if (content.contains(" ")) {
                 this.number = content.split(" ")[1];
+            }
+            else{
+                this.number = Integer.toString(count);
+                count++;
             }
             Object fileContent = latestMessage.getContent();
             if (fileContent instanceof Multipart) {
