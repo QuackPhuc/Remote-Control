@@ -27,9 +27,9 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TabPane layoutY="40.0" prefHeight="460.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <TabPane fx:id="myTab" layoutY="40.0" prefHeight="460.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0">
         <tabs>
-          <Tab text="Power Control">
+          <Tab fx:id="tab1" text="Power Control">
             <content>
               <AnchorPane fx:id="pane_pow" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -82,9 +82,9 @@
                            </children>
                         </HBox>
                         <ImageView fx:id="scrshot" fitHeight="318.0" fitWidth="580.0" layoutX="116.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="130.0" />
-                        <Label fx:id="responeScr" disable="true" layoutX="293.0" layoutY="62.0" prefHeight="25.0" prefWidth="195.0" textFill="#35d932">
+                        <Label fx:id="responeScr" layoutX="293.0" layoutY="62.0" prefHeight="25.0" prefWidth="195.0" textFill="#35d932">
                            <font>
-                              <Font size="16.0" />
+                              <Font size="18.0" />
                            </font>
                         </Label>
                      </children></AnchorPane>

